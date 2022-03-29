@@ -12,6 +12,35 @@ void beam::set_ndof() {
     ndof = (nelement + 1) * 6;
 }
 
+void beam::set_mass_matrix() {
+    // Get element mass matrix
+    double l_element = length / nelement;
+    double factor = rho * area * l_element;
+    Matrix<double, 12, 12> mass_element = utils::element_mass_matrix(l_element, factor);
+    // Assemble to get the global mass matrix of the beam
+    mass_matrix(ndof, ndof);
+    mass_matrix.setZero();
+    for (int i = 0; i < nelement; i++) {
+        mass_matrix.block(6*i,6*i,6,6) += mass_element.topLeftCorner(6,6);
+        mass_matrix.block(6*(i+1),6*i,6,6) = mass_element.bottomLeftCorner(6,6);
+        mass_matrix.block(6*i,6*(i+1),6,6) = mass_element.topRightCorner(6,6);
+        mass_matrix.block(6*(i+1),6*(i+1),6,6) += mass_element.bottomRightCorner(6,6);
+    }
+    // Adjust mass matrix according to constraint
+    if (botCnstr != 0) {
+        mass_matrix.topRows(3*botCnstr).setZero();
+        for (int i = 0; i < 3*botCnstr; i++) {
+            mass_matrix(i,i) = 1.0;
+        }
+    }
+    if (topCnstr != 0) {
+        mass_matrix.bottomRows(3*topCnstr).setZero();
+        for (int i = 0; i < 3*topCnstr; i++) {
+            mass_matrix(ndof-i,ndof-i) = 1.0;
+        }
+    }
+}
+
 ostream& operator<<(ostream& os, const beam& b) {
     os << "Beam details: " << endl;
     os << "    E - " << b.E << endl;
@@ -91,6 +120,7 @@ void beam_builder::set_acceleration(VectorXd acceleration) {
 beam *beam_builder::get_beam() {
     this->b->set_area();
     this->b->set_inertia();
+    this->b->set_mass_matrix();
     this->b->forces = new beam_forces();
     beam* result = this->b;
     this->Reset();

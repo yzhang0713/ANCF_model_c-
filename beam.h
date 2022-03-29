@@ -3,6 +3,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include "beam_forces.h"
+#include "utils.h"
 
 using namespace std;
 using namespace Eigen;
@@ -24,6 +25,7 @@ private:
     VectorXd velocity;      // Velocity vector of beam (m/s)
     VectorXd acceleration;  // Acceleration vector of beam (m/s^2)
     beam_forces * forces;     // All forces of beam
+    MatrixXd mass_matrix;   // Mass matrix of beam
     friend class beam_builder;
 public:
     beam() = default;
@@ -31,6 +33,7 @@ public:
     void set_area();
     void set_inertia();
     void set_ndof();
+    void set_mass_matrix();
     double get_E() {return E;}
     double get_rho() {return rho;}
     double get_length() {return length;}
@@ -53,6 +56,7 @@ public:
     VectorXd get_elastic_force() {return forces->get_Q_elastic();};
     VectorXd get_dist_force() {return forces->get_Q_dist();};
     VectorXd get_point_force() {return forces->get_Q_dist();};
+    MatrixXd get_mass_matrix() {return mass_matrix;};
     friend ostream& operator<<(ostream&, const beam&);
 };
 

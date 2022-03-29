@@ -52,10 +52,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\YuZhang\ANCF_model_c++
+CMAKE_SOURCE_DIR = C:\YuZhang\GitRepo\ANCF_model_cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\YuZhang\ANCF_model_c++\cmake-build-debug
+CMAKE_BINARY_DIR = C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/ANCF_model_c__.dir/depend.make
@@ -68,128 +68,142 @@ include CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/main.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/main.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ANCF_model_c__.dir/main.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\main.cpp.obj -c C:\YuZhang\ANCF_model_c++\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ANCF_model_c__.dir/main.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\main.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\main.cpp
 
 CMakeFiles/ANCF_model_c__.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/main.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\main.cpp > CMakeFiles\ANCF_model_c__.dir\main.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\main.cpp > CMakeFiles\ANCF_model_c__.dir\main.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/main.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\main.cpp -o CMakeFiles\ANCF_model_c__.dir\main.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\main.cpp -o CMakeFiles\ANCF_model_c__.dir\main.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/beam.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/beam.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/beam.cpp.obj: ../beam.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ANCF_model_c__.dir/beam.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\beam.cpp.obj -c C:\YuZhang\ANCF_model_c++\beam.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ANCF_model_c__.dir/beam.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\beam.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\beam.cpp
 
 CMakeFiles/ANCF_model_c__.dir/beam.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/beam.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\beam.cpp > CMakeFiles\ANCF_model_c__.dir\beam.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\beam.cpp > CMakeFiles\ANCF_model_c__.dir\beam.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/beam.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/beam.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\beam.cpp -o CMakeFiles\ANCF_model_c__.dir\beam.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\beam.cpp -o CMakeFiles\ANCF_model_c__.dir\beam.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/utils.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/utils.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/utils.cpp.obj: ../utils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ANCF_model_c__.dir/utils.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\utils.cpp.obj -c C:\YuZhang\ANCF_model_c++\utils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ANCF_model_c__.dir/utils.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\utils.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\utils.cpp
 
 CMakeFiles/ANCF_model_c__.dir/utils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/utils.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\utils.cpp > CMakeFiles\ANCF_model_c__.dir\utils.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\utils.cpp > CMakeFiles\ANCF_model_c__.dir\utils.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/utils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/utils.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\utils.cpp -o CMakeFiles\ANCF_model_c__.dir\utils.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\utils.cpp -o CMakeFiles\ANCF_model_c__.dir\utils.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.obj: ../force_engine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\force_engine.cpp.obj -c C:\YuZhang\ANCF_model_c++\force_engine.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\force_engine.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\force_engine.cpp
 
 CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\force_engine.cpp > CMakeFiles\ANCF_model_c__.dir\force_engine.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\force_engine.cpp > CMakeFiles\ANCF_model_c__.dir\force_engine.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\force_engine.cpp -o CMakeFiles\ANCF_model_c__.dir\force_engine.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\force_engine.cpp -o CMakeFiles\ANCF_model_c__.dir\force_engine.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/particle.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/particle.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/particle.cpp.obj: ../particle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ANCF_model_c__.dir/particle.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\particle.cpp.obj -c C:\YuZhang\ANCF_model_c++\particle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ANCF_model_c__.dir/particle.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\particle.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\particle.cpp
 
 CMakeFiles/ANCF_model_c__.dir/particle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/particle.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\particle.cpp > CMakeFiles\ANCF_model_c__.dir\particle.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\particle.cpp > CMakeFiles\ANCF_model_c__.dir\particle.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/particle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/particle.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\particle.cpp -o CMakeFiles\ANCF_model_c__.dir\particle.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\particle.cpp -o CMakeFiles\ANCF_model_c__.dir\particle.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj: ../system_engine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\system_engine.cpp.obj -c C:\YuZhang\ANCF_model_c++\system_engine.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\system_engine.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\system_engine.cpp
 
 CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\system_engine.cpp > CMakeFiles\ANCF_model_c__.dir\system_engine.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\system_engine.cpp > CMakeFiles\ANCF_model_c__.dir\system_engine.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\system_engine.cpp -o CMakeFiles\ANCF_model_c__.dir\system_engine.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\system_engine.cpp -o CMakeFiles\ANCF_model_c__.dir\system_engine.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj: ../time_march.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\time_march.cpp.obj -c C:\YuZhang\ANCF_model_c++\time_march.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\time_march.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\time_march.cpp
 
 CMakeFiles/ANCF_model_c__.dir/time_march.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/time_march.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\time_march.cpp > CMakeFiles\ANCF_model_c__.dir\time_march.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\time_march.cpp > CMakeFiles\ANCF_model_c__.dir\time_march.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/time_march.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/time_march.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\time_march.cpp -o CMakeFiles\ANCF_model_c__.dir\time_march.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\time_march.cpp -o CMakeFiles\ANCF_model_c__.dir\time_march.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj: ../beam_forces.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\beam_forces.cpp.obj -c C:\YuZhang\ANCF_model_c++\beam_forces.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\beam_forces.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\beam_forces.cpp
 
 CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\beam_forces.cpp > CMakeFiles\ANCF_model_c__.dir\beam_forces.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\beam_forces.cpp > CMakeFiles\ANCF_model_c__.dir\beam_forces.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\beam_forces.cpp -o CMakeFiles\ANCF_model_c__.dir\beam_forces.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\beam_forces.cpp -o CMakeFiles\ANCF_model_c__.dir\beam_forces.cpp.s
 
 CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
 CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
 CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj: ../fluid_field.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\fluid_field.cpp.obj -c C:\YuZhang\ANCF_model_c++\fluid_field.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\fluid_field.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\fluid_field.cpp
 
 CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\ANCF_model_c++\fluid_field.cpp > CMakeFiles\ANCF_model_c__.dir\fluid_field.cpp.i
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\fluid_field.cpp > CMakeFiles\ANCF_model_c__.dir\fluid_field.cpp.i
 
 CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\ANCF_model_c++\fluid_field.cpp -o CMakeFiles\ANCF_model_c__.dir\fluid_field.cpp.s
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\fluid_field.cpp -o CMakeFiles\ANCF_model_c__.dir\fluid_field.cpp.s
+
+CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj: CMakeFiles/ANCF_model_c__.dir/flags.make
+CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj: CMakeFiles/ANCF_model_c__.dir/includes_CXX.rsp
+CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj: ../collision_engine.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ANCF_model_c__.dir\collision_engine.cpp.obj -c C:\YuZhang\GitRepo\ANCF_model_cpp\collision_engine.cpp
+
+CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\YuZhang\GitRepo\ANCF_model_cpp\collision_engine.cpp > CMakeFiles\ANCF_model_c__.dir\collision_engine.cpp.i
+
+CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\YuZhang\GitRepo\ANCF_model_cpp\collision_engine.cpp -o CMakeFiles\ANCF_model_c__.dir\collision_engine.cpp.s
 
 # Object files for target ANCF_model_c__
 ANCF_model_c___OBJECTS = \
@@ -201,7 +215,8 @@ ANCF_model_c___OBJECTS = \
 "CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj" \
 "CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj" \
 "CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj" \
-"CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj"
+"CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj" \
+"CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj"
 
 # External object files for target ANCF_model_c__
 ANCF_model_c___EXTERNAL_OBJECTS =
@@ -215,11 +230,12 @@ ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.obj
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj
+ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/build.make
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/linklibs.rsp
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/objects1.rsp
 ANCF_model_c__.exe: CMakeFiles/ANCF_model_c__.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable ANCF_model_c__.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable ANCF_model_c__.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\ANCF_model_c__.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -231,6 +247,6 @@ CMakeFiles/ANCF_model_c__.dir/clean:
 .PHONY : CMakeFiles/ANCF_model_c__.dir/clean
 
 CMakeFiles/ANCF_model_c__.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\YuZhang\ANCF_model_c++ C:\YuZhang\ANCF_model_c++ C:\YuZhang\ANCF_model_c++\cmake-build-debug C:\YuZhang\ANCF_model_c++\cmake-build-debug C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles\ANCF_model_c__.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\YuZhang\GitRepo\ANCF_model_cpp C:\YuZhang\GitRepo\ANCF_model_cpp C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles\ANCF_model_c__.dir\DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ANCF_model_c__.dir/depend
 

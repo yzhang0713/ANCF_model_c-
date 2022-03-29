@@ -91,3 +91,44 @@ Matrix3d utils::tilde(Vector3d vec) {
     vec_mat << 0.0, -vec(2), vec(1), vec(2), 0.0, -vec(0), -vec(1), vec(0), 0.0;
     return vec_mat;
 }
+
+// Provide the element level mass matrix
+Matrix<double, 12, 12> utils::element_mass_matrix(double L, double factor) {
+    double m11 = factor * 13.0 / 35.0;
+    double m12 = factor * L * 11.0 / 210.0;
+    double m13 = factor * 9.0 / 70.0;
+    double m14 = - factor * L * 13.0 / 420.0;
+    double m22 = factor * L * L / 105.0;
+    double m23 = - m14;
+    double m24 = - factor * L * L / 140.0;
+    double m33 = m11;
+    double m34 = - m12;
+    double m44 = m22;
+    Matrix<double, 12, 12> mass_matrix;
+    mass_matrix.setZero();
+    for (int i = 0; i < 3; i++) {
+        mass_matrix(i, i) = m11;
+        mass_matrix(i+3, i) = m12;
+        mass_matrix(i+6,i) = m13;
+        mass_matrix(i+9,i) = m14;
+    }
+    for (int i = 3; i < 6; i++) {
+        mass_matrix(i-3,i) = m12;
+        mass_matrix(i,i) = m22;
+        mass_matrix(i+3,i) = m23;
+        mass_matrix(i+6,i) = m24;
+    }
+    for (int i = 6; i < 9; i++) {
+        mass_matrix(i-6,i) = m13;
+        mass_matrix(i-3,i) = m23;
+        mass_matrix(i,i) = m33;
+        mass_matrix(i+3,i) = m34;
+    }
+    for (int i = 9; i < 12; i++) {
+        mass_matrix(i-9,i) = m14;
+        mass_matrix(i-6,i) = m24;
+        mass_matrix(i-3,i) = m34;
+        mass_matrix(i,i) = m44;
+    }
+    return mass_matrix;
+}

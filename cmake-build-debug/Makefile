@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\YuZhang\ANCF_model_c++
+CMAKE_SOURCE_DIR = C:\YuZhang\GitRepo\ANCF_model_cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\YuZhang\ANCF_model_c++\cmake-build-debug
+CMAKE_BINARY_DIR = C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles C:\YuZhang\ANCF_model_c++\cmake-build-debug\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\YuZhang\ANCF_model_c++\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\YuZhang\GitRepo\ANCF_model_cpp\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -175,6 +175,30 @@ beam_forces.s: beam_forces.cpp.s
 beam_forces.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.s
 .PHONY : beam_forces.cpp.s
+
+collision_engine.obj: collision_engine.cpp.obj
+.PHONY : collision_engine.obj
+
+# target to build an object file
+collision_engine.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.obj
+.PHONY : collision_engine.cpp.obj
+
+collision_engine.i: collision_engine.cpp.i
+.PHONY : collision_engine.i
+
+# target to preprocess a source file
+collision_engine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.i
+.PHONY : collision_engine.cpp.i
+
+collision_engine.s: collision_engine.cpp.s
+.PHONY : collision_engine.s
+
+# target to generate assembly for a file
+collision_engine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/collision_engine.cpp.s
+.PHONY : collision_engine.cpp.s
 
 fluid_field.obj: fluid_field.cpp.obj
 .PHONY : fluid_field.obj
@@ -359,6 +383,9 @@ help:
 	@echo ... beam_forces.obj
 	@echo ... beam_forces.i
 	@echo ... beam_forces.s
+	@echo ... collision_engine.obj
+	@echo ... collision_engine.i
+	@echo ... collision_engine.s
 	@echo ... fluid_field.obj
 	@echo ... fluid_field.i
 	@echo ... fluid_field.s
