@@ -115,6 +115,12 @@
 		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/main.cpp">
 			<Option target="ANCF_model_c__"/>
 		</Unit>
+		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/oriented_bounding_box.cpp">
+			<Option target="ANCF_model_c__"/>
+		</Unit>
+		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/oriented_bounding_box.h">
+			<Option target="ANCF_model_c__"/>
+		</Unit>
 		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/particle.cpp">
 			<Option target="ANCF_model_c__"/>
 		</Unit>

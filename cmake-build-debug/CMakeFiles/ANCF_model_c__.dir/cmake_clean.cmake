@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/ANCF_model_c__.dir/fluid_field.cpp.obj"
   "CMakeFiles/ANCF_model_c__.dir/force_engine.cpp.obj"
   "CMakeFiles/ANCF_model_c__.dir/main.cpp.obj"
+  "CMakeFiles/ANCF_model_c__.dir/oriented_bounding_box.cpp.obj"
   "CMakeFiles/ANCF_model_c__.dir/particle.cpp.obj"
   "CMakeFiles/ANCF_model_c__.dir/system_engine.cpp.obj"
   "CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj"

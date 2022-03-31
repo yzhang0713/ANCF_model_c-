@@ -272,6 +272,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+oriented_bounding_box.obj: oriented_bounding_box.cpp.obj
+.PHONY : oriented_bounding_box.obj
+
+# target to build an object file
+oriented_bounding_box.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/oriented_bounding_box.cpp.obj
+.PHONY : oriented_bounding_box.cpp.obj
+
+oriented_bounding_box.i: oriented_bounding_box.cpp.i
+.PHONY : oriented_bounding_box.i
+
+# target to preprocess a source file
+oriented_bounding_box.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/oriented_bounding_box.cpp.i
+.PHONY : oriented_bounding_box.cpp.i
+
+oriented_bounding_box.s: oriented_bounding_box.cpp.s
+.PHONY : oriented_bounding_box.s
+
+# target to generate assembly for a file
+oriented_bounding_box.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/oriented_bounding_box.cpp.s
+.PHONY : oriented_bounding_box.cpp.s
+
 particle.obj: particle.cpp.obj
 .PHONY : particle.obj
 
@@ -395,6 +419,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... oriented_bounding_box.obj
+	@echo ... oriented_bounding_box.i
+	@echo ... oriented_bounding_box.s
 	@echo ... particle.obj
 	@echo ... particle.i
 	@echo ... particle.s

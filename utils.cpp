@@ -132,3 +132,25 @@ Matrix<double, 12, 12> utils::element_mass_matrix(double L, double factor) {
     }
     return mass_matrix;
 }
+
+vector<Vector3d> get_points_from_beam(beam* b, int start_element, int n_element, int n_point) {
+    vector<Vector3d> points;
+    if (n_point <= 1) {
+        return points;
+    }
+    double l_element = b->get_length() / ((double) b->get_nelement());
+    VectorXd pos = b->get_position();
+    for (int i = 0; i < n_point; i++) {
+        int k = start_element + (n_element*i)/(n_point-1);
+        if ((n_element*i)%(n_point-1) == 0) {
+            points.push_back(pos.segment(6*(k-1),3));
+        } else {
+            double xi = ((double) (n_element*i)) / ((double) (n_point-1)) - k;
+            Vector<double, 4> S;
+            utils::shape_fun(xi*l_element, l_element, 0, S);
+            Matrix<double, 3, 4> disp_rs = pos.segment(6*(k-1), 12).reshaped(3, 4);
+            points.push_back(disp_rs*S);
+        }
+    }
+    return points;
+}
