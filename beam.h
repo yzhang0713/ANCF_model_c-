@@ -11,6 +11,7 @@ using namespace Eigen;
 class beam {
 private:
     double E = 8.0e8;               // Young's modulus (Pa)
+    double nu = 0.3;                // Poisson's ratio
     double rho = 8.5e2;             // Density (kg/m^3)
     double length = 1.0;          // Length of beam (m)
     double thick = 5.0e-4;           // Thickness of beam (m)
@@ -35,6 +36,7 @@ public:
     void set_ndof();
     void set_mass_matrix();
     double get_E() {return E;}
+    double get_nu() {return nu;}
     double get_rho() {return rho;}
     double get_length() {return length;}
     double get_thick() {return thick;}
@@ -68,6 +70,7 @@ public:
     ~beam_builder();
     void Reset();
     void set_E(double);
+    void set_nu(double);
     void set_rho(double);
     void set_length(double);
     void set_thick(double);

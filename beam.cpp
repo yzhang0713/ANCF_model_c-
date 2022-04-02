@@ -68,6 +68,10 @@ void beam_builder::set_E(double E) {
     this->b->E = E;
 }
 
+void beam_builder::set_nu(double nu) {
+    this->b->nu = nu;
+}
+
 void beam_builder::set_rho(double rho) {
     this->b->rho = rho;
 }

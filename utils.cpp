@@ -154,3 +154,7 @@ vector<Vector3d> get_points_from_beam(beam* b, int start_element, int n_element,
     }
     return points;
 }
+
+vector<Vector3d> utils::get_points_from_beam_element(beam* b, int i_element, vector<double> positions) {
+
+}

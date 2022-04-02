@@ -21,8 +21,8 @@ public:
     void gravity_force(beam *);
     void elastic_force(beam *);
     void add_constraint_load(int, int, VectorXd &);
-//    Eigen::MatrixXd point_load(Eigen::MatrixXd, std::vector<beam>);
     void distributed_load(beam *, fluid_field *, double);
+    void point_load(beam *, int, beam *, int);
 };
 
 

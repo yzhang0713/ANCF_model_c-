@@ -94,6 +94,12 @@
 		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/beam_forces.h">
 			<Option target="ANCF_model_c__"/>
 		</Unit>
+		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/bounding_sphere.cpp">
+			<Option target="ANCF_model_c__"/>
+		</Unit>
+		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/bounding_sphere.h">
+			<Option target="ANCF_model_c__"/>
+		</Unit>
 		<Unit filename="C:/YuZhang/GitRepo/ANCF_model_cpp/collision_engine.cpp">
 			<Option target="ANCF_model_c__"/>
 		</Unit>

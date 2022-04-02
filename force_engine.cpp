@@ -256,3 +256,16 @@ void force_engine::distributed_load(beam * b, fluid_field * ff, double t) {
     // Set distributed force
     b->set_dist_force(Qd);
 }
+
+void force_engine::point_load(beam * b1, int ielement_1, beam * b2, int ielement_2) {
+    Matrix<double,3,4> disp1_rs = b1->get_position().segment(6*(ielement_1-1), 12).reshaped(3,4);
+    Matrix<double,3,4> disp2_rs = b2->get_position().segment(6*(ielement_2-1), 12).reshaped(3,4);
+    // Contact parameters
+    double stiffness_factor = 1.0e-3;
+    double E_star = stiffness_factor / ((2.0*(1.0-pow(b1->get_nu(),2))/b1->get_E()) +
+            (2.0*(1.0-pow(b2->get_nu(),2)/b2->get_E())));
+    double R = 1.0 / (2.0/b1->get_thick() + 2.0/b2->get_thick());
+    double K = 4.0 / 3.0 * E_star * sqrt(R);
+
+
+}

@@ -176,6 +176,30 @@ beam_forces.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/beam_forces.cpp.s
 .PHONY : beam_forces.cpp.s
 
+bounding_sphere.obj: bounding_sphere.cpp.obj
+.PHONY : bounding_sphere.obj
+
+# target to build an object file
+bounding_sphere.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/bounding_sphere.cpp.obj
+.PHONY : bounding_sphere.cpp.obj
+
+bounding_sphere.i: bounding_sphere.cpp.i
+.PHONY : bounding_sphere.i
+
+# target to preprocess a source file
+bounding_sphere.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/bounding_sphere.cpp.i
+.PHONY : bounding_sphere.cpp.i
+
+bounding_sphere.s: bounding_sphere.cpp.s
+.PHONY : bounding_sphere.s
+
+# target to generate assembly for a file
+bounding_sphere.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ANCF_model_c__.dir\build.make CMakeFiles/ANCF_model_c__.dir/bounding_sphere.cpp.s
+.PHONY : bounding_sphere.cpp.s
+
 collision_engine.obj: collision_engine.cpp.obj
 .PHONY : collision_engine.obj
 
@@ -407,6 +431,9 @@ help:
 	@echo ... beam_forces.obj
 	@echo ... beam_forces.i
 	@echo ... beam_forces.s
+	@echo ... bounding_sphere.obj
+	@echo ... bounding_sphere.i
+	@echo ... bounding_sphere.s
 	@echo ... collision_engine.obj
 	@echo ... collision_engine.i
 	@echo ... collision_engine.s

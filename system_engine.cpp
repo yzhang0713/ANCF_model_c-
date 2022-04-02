@@ -28,13 +28,14 @@ void system_engine::read_beams() {
     string beam_acc;
     while (getline(beam_file, beam_line)) {
         istringstream iss(beam_line);
-        double E, rho, length, thick, width;
+        double E, nu, rho, length, thick, width;
         int nelement, botCnstr, topCnstr;
-        if (!(iss >> E >> rho >> length >> thick >> width >> nelement >> botCnstr >> topCnstr)) {
+        if (!(iss >> E >> nu >> rho >> length >> thick >> width >> nelement >> botCnstr >> topCnstr)) {
             cout << "Error reading beam file." << endl;
         }
         beam_builder * b_builder = new beam_builder();
         b_builder->set_E(E);
+        b_builder->set_nu(nu);
         b_builder->set_rho(rho);
         b_builder->set_length(length);
         b_builder->set_thick(thick);
