@@ -232,3 +232,19 @@ void system_engine::update_beam_dist_forces() {
         f_engine->distributed_load(b, f_field, t);
     }
 }
+
+void system_engine::reset_beam_point_forces() {
+    for (beam * b : beams) {
+        b->set_point_force(VectorXd::Zero(b->get_ndof()));
+    }
+}
+
+void system_engine::update_beam_point_forces() {
+    for (beam * b1 : beams) {
+        for (beam * b2 : beams) {
+            if (b1 != b2) {
+                f_engine->point_load(b1, b2);
+            }
+        }
+    }
+}

@@ -156,21 +156,81 @@ vector<Vector3d> get_points_from_beam(beam* b, int start_element, int n_element,
 }
 
 vector<Vector3d> utils::get_points_from_beam_element(beam* b, int i_element, vector<double> positions) {
-
+    Matrix<double, 3, 4> disp_rs = b->get_position().segment(6*(i_element-1),12).reshaped(3,4);
+    double l_element = b->get_length() / ((double) b->get_nelement());
+    vector<Vector3d> centers;
+    for (double pos : positions) {
+        Vector4d S = Vector4d::Zero();
+        utils::shape_fun(pos*l_element, l_element, 0, S);
+        centers.push_back(disp_rs*S);
+    }
+    return centers;
 }
 
-Vector3i get_level_3_centers(int n_particles) {
+vector<bounding_sphere> utils::get_bs_from_beam_element(beam * b, int i_element, vector<double> position, double radius) {
+    vector<Vector3d> centers = utils::get_points_from_beam_element(b, i_element, position);
+    vector<bounding_sphere> bss;
+    for (auto pos : centers) {
+        bounding_sphere bs{};
+        bs.set_center_point(pos);
+        bs.set_radius(radius);
+        bss.push_back(bs);
+    }
+    return bss;
+}
+
+Vector3i utils::get_level_3_centers(int n_particles) {
     Vector3i n_centers;
-    int n_base = (int) 
-    if (n_particles >= 1000) {
-        n_centers << 10, 10, n_particles/100;
-    } else if (n_particles >= 729) {
-        n_centers << 9, 9, n_particles/81;
-    } else if (n_particles >= 512) {
-        n_centers << 8, 8, n_particles/64;
-    } else if (n_particles >= 343) {
-        n_centers << 7, 7, n_particles/49;
-    } else if (n_particles >= 216) {
-        n_centers << 6, 6, n_particles/36;
-    } else if (n_particles >= )
+    int n_base = (int) cbrt(n_particles);
+    n_centers << n_base, n_base, n_particles/n_base/n_base;
+    return n_centers;
+}
+
+Matrix<double, 3, 12> utils::get_shape_matrix(Vector4d & S) {
+    Matrix<double, 3, 12> S_mat;
+    S_mat.setZero();
+    for (int ii = 0; ii < 4; ii++) {
+        for (int jj = 0; jj < 3; jj++) {
+            S_mat(jj, 3*(ii-1)+jj) = S(ii);
+        }
+    }
+    return S_mat;
+}
+
+Matrix<double, 3, 12> utils::get_shape_matrix(double x, double L, int der) {
+    Vector4d S;
+    utils::shape_fun(x, L, der, S);
+    Matrix<double, 3, 12> S_mat;
+    S_mat.setZero();
+    for (int ii = 0; ii < 4; ii++) {
+        for (int jj = 0; jj < 3; jj++) {
+            S_mat(jj, 3*(ii-1)+jj) = S(ii);
+        }
+    }
+    return S_mat;
+}
+
+vector<Vector2i> utils::get_beam_segments(beam* b, int start_element, int n_element, int n_segment) {
+    vector<Vector2i> segments;
+    if (n_element <= n_segment) {
+        for (int i = 0; i < n_element; i++) {
+            Vector2i seg {i+start_element, 1};
+            segments.push_back(seg);
+        }
+        return segments;
+    }
+    int cur_element = n_element;
+    int cur_segment = n_segment;
+    int seg_start = start_element;
+    for (int i = 0; i < n_segment-1; i++) {
+        int seg_length = (int) (ceil((double)cur_element/(double)cur_segment));
+        Vector2i seg {seg_start, seg_length};
+        segments.push_back(seg);
+        cur_segment--;
+        cur_element -= seg_length;
+        seg_start += seg_length;
+    }
+    Vector2i seg {seg_start, cur_element};
+    segments.push_back(seg);
+    return segments;
 }

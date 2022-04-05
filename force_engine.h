@@ -2,10 +2,12 @@
 #define ANCF_MODEL_C___FORCE_ENGINE_H
 #include <Eigen/Dense>
 #include <vector>
+#include <map>
 #include <math.h>
 #include "beam.h"
 #include "fluid_field.h"
 #include "utils.h"
+#include "oriented_bounding_box.h"
 
 using namespace Eigen;
 using namespace std;
@@ -22,7 +24,9 @@ public:
     void elastic_force(beam *);
     void add_constraint_load(int, int, VectorXd &);
     void distributed_load(beam *, fluid_field *, double);
-    void point_load(beam *, int, beam *, int);
+    void point_load_element_level(beam *, int, beam *, int);
+    void point_load(beam*, beam*);
+    void point_load_segment_level(beam*, int, int, beam*, int, int);
 };
 
 

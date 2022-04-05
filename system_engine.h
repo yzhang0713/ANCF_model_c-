@@ -36,6 +36,8 @@ public:
     void update_beam_gravity_forces();
     void update_beam_elastic_forces();
     void update_beam_dist_forces();
+    void reset_beam_point_forces();
+    void update_beam_point_forces();
 };
 
 

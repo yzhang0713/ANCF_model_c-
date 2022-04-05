@@ -9,3 +9,11 @@ int check_disjoint(const bounding_sphere & bs1, const bounding_sphere & bs2) {
 int bounding_sphere::is_bs_disjoint(const bounding_sphere & other) {
     return check_disjoint(*this, other);
 }
+
+double compute_distance(const bounding_sphere & bs1, const bounding_sphere & bs2) {
+    return (bs1.center_point - bs2.center_point).norm();
+}
+
+double bounding_sphere::get_distance(const bounding_sphere & other) {
+    return compute_distance(*this, other);
+}

@@ -257,9 +257,12 @@ void force_engine::distributed_load(beam * b, fluid_field * ff, double t) {
     b->set_dist_force(Qd);
 }
 
-void force_engine::point_load(beam * b1, int ielement_1, beam * b2, int ielement_2) {
-    Matrix<double,3,4> disp1_rs = b1->get_position().segment(6*(ielement_1-1), 12).reshaped(3,4);
-    Matrix<double,3,4> disp2_rs = b2->get_position().segment(6*(ielement_2-1), 12).reshaped(3,4);
+void force_engine::point_load_element_level(beam * b1, int ielement_1, beam * b2, int ielement_2) {
+    // Initialize point load
+    Vector<double, 12> Qp1, Qp2;
+    Qp1.setZero();
+    Qp2.setZero();
+
     // Contact parameters
     double stiffness_factor = 1.0e-3;
     double E_star = stiffness_factor / ((2.0*(1.0-pow(b1->get_nu(),2))/b1->get_E()) +
@@ -272,7 +275,228 @@ void force_engine::point_load(beam * b1, int ielement_1, beam * b2, int ielement
     // Using particle contact to do level 3
     double l_element_1 = b1->get_length() / ((double) b1->get_nelement());
     int n_particle_1 = (int) (l_element_1 / b1->get_thick());
-    int n_center_1 =
+    Vector3i n_centers_1 = utils::get_level_3_centers(n_particle_1);
     double l_element_2 = b2->get_length() / ((double) b2->get_nelement());
+    int n_particle_2 = (int) (l_element_2 / b2->get_thick());
+    Vector3i n_centers_2 = utils::get_level_3_centers(n_particle_2);
 
+    // First level of overlap check
+    vector<double> level_1_pos_1;
+    for (int i = 0; i < n_centers_1(0); i++) {
+        level_1_pos_1.push_back(((double)i+0.5)/((double)n_centers_1(0)));
+    }
+    double level_1_rad_1 = l_element_1 / ((double) n_centers_1(0));
+    vector<bounding_sphere> level_1_bss_1 = utils::get_bs_from_beam_element(b1, ielement_1, level_1_pos_1, level_1_rad_1);
+    vector<double> level_1_pos_2;
+    for (int i = 0; i < n_centers_2(0); i++) {
+        level_1_pos_2.push_back(((double)i+0.5)/((double)n_centers_2(0)));
+    }
+    double level_1_rad_2 = l_element_2 / ((double) n_centers_2(0));
+    vector<bounding_sphere> level_1_bss_2 = utils::get_bs_from_beam_element(b2, ielement_2, level_1_pos_2, level_1_rad_2);
+
+    // Overlap record
+    map<int, vector<int>> level_1_overlap;
+    for (int i = 0; i < n_centers_1(0); i++) {
+        bounding_sphere bs_1 = level_1_bss_1[i];
+        for (int j = 0; j < n_centers_2(0); j++) {
+            bounding_sphere bs_2 = level_1_bss_2[j];
+            if (!bs_1.is_bs_disjoint(bs_2)) {
+                level_1_overlap[i].push_back(j);
+            }
+        }
+    }
+
+    // Second level of overlap check
+    map<int, vector<int>> level_2_overlap;
+    for (const auto& [n1, n2_list] : level_1_overlap) {
+        vector<double> level_2_pos_1;
+        int add_1 = n1 * n_centers_1(1);
+        int base_1 = n_centers_1(1) * n_centers_1(0);
+        for (int i = 0; i < n_centers_1(1); i++) {
+            level_2_pos_1.push_back(((double)i+0.5+(double)add_1)/((double) base_1));
+        }
+        double level_2_rad_1 = l_element_1 / ((double) base_1);
+        vector<bounding_sphere> level_2_bss_1 = utils::get_bs_from_beam_element(b1, ielement_1, level_2_pos_1, level_2_rad_1);
+        for (auto n2 : n2_list) {
+            vector<double> level_2_pos_2;
+            int add_2 = n2 * n_centers_2(1);
+            int base_2 = n_centers_2(1) * n_centers_2(0);
+            for (int i = 0; i < n_centers_2(1); i++) {
+                level_2_pos_2.push_back(((double)i+0.5+(double)add_2)/((double) base_2));
+            }
+            double level_2_rad_2 = l_element_2 / ((double) base_2);
+            vector<bounding_sphere> level_2_bss_2 = utils::get_bs_from_beam_element(b2, ielement_2, level_2_pos_2, level_2_rad_2);
+
+            // Check overlap
+            for (int i = 0; i < level_2_bss_1.size(); i++) {
+                bounding_sphere bs_1 = level_2_bss_1[i];
+                for (int j = 0; j < level_2_bss_2.size(); j++) {
+                    bounding_sphere bs_2 = level_2_bss_2[j];
+                    if (!bs_1.is_bs_disjoint(bs_2)) {
+                        level_2_overlap[i+add_1].push_back(j+add_2);
+                    }
+                }
+            }
+        }
+    }
+
+    // Third level (particle level) of overlap check
+    for (const auto& [n1, n2_list] : level_2_overlap) {
+        vector<double> level_3_pos_1;
+        int add_1 = n1 * n_centers_1(2);
+        int base_1 = n_centers_1.prod();
+        for (int i = 0; i < n_centers_1(2); i++) {
+            level_3_pos_1.push_back(((double)i+0.5+(double)add_1)/((double) base_1));
+        }
+        double level_3_rad_1 = b1->get_thick()/2.0;
+        vector<bounding_sphere> level_3_bss_1 = utils::get_bs_from_beam_element(b1, ielement_1, level_3_pos_1, level_3_rad_1);
+        for (auto n2 : n2_list) {
+            vector<double> level_3_pos_2;
+            int add_2 = n2 * n_centers_2(2);
+            int base_2 = n_centers_2.prod();
+            for (int i = 0; i < n_centers_2(2); i++) {
+                level_3_pos_2.push_back(((double)i+0.5+(double)add_2)/((double) base_2));
+            }
+            double level_3_rad_2 = b2->get_thick()/2.0;
+            vector<bounding_sphere> level_3_bss_2 = utils::get_bs_from_beam_element(b2, ielement_2, level_3_pos_2, level_3_rad_2);
+
+            // Check overlap and compute contact force
+            for (int i = 0; i < level_3_bss_1.size(); i++) {
+                bounding_sphere bs_1 = level_3_bss_1[i];
+                for (int j = 0; j < level_3_bss_2.size(); j++) {
+                    bounding_sphere bs_2 = level_3_bss_2[j];
+                    if (!bs_1.is_bs_disjoint(bs_2)) {
+                        double distance = bs_1.get_distance(bs_2);
+                        double f_mag = K * pow(b1->get_thick()/2.0+b2->get_thick()/2.0-distance,1.5);
+                        Vector3d direction = get_direction(bs_1, bs_2);
+                        Matrix<double, 3, 12> S_mat = utils::get_shape_matrix(level_3_pos_1[i]*l_element_1, l_element_1, 0);
+                        Qp1 += (f_mag / distance * (S_mat.transpose())*direction);
+                        S_mat = utils::get_shape_matrix(level_3_pos_2[j]*l_element_2, l_element_2, 0);
+                        Qp2 += (-f_mag / distance * (S_mat.transpose())*direction);
+                    }
+                }
+            }
+        }
+    }
+
+    // Update the point load of beam
+    b1->get_point_force().segment(6*(ielement_1-1),12) += Qp1;
+    b2->get_point_force().segment(6*(ielement_2-1),12) += Qp2;
 }
+
+void force_engine::point_load(beam * b1, beam * b2) {
+    // Firstly, do beam level contact detection
+
+    // Start with bounding sphere check to save computation
+    bounding_sphere bs_1 {};
+    bs_1.set_center_point(utils::get_points_from_beam(b1, 1, b1->get_nelement(), 3)[1]);
+    bs_1.set_radius(b1->get_length()/2.0);
+    bounding_sphere bs_2 {};
+    bs_2.set_center_point(utils::get_points_from_beam(b2, 1, b2->get_nelement(), 3)[1]);
+    bs_2.set_radius(b2->get_length()/2.0);
+    if (bs_1.is_bs_disjoint(bs_2)) {
+        return;
+    }
+
+    // Then check with oriented bounding box
+    oriented_bounding_box obb_1 {};
+    obb_1.set_obb_info(utils::get_points_from_beam(b1, 1, b1->get_nelement(), 5));
+    oriented_bounding_box obb_2 {};
+    obb_2.set_obb_info(utils::get_points_from_beam(b2, 1, b2->get_nelement(), 5));
+    // In case of no disjoint, no contact force
+    if (obb_1.is_obb_disjoint(obb_2, b1->get_thick()/2.0+b2->get_thick()/2.0)) {
+        return;
+    }
+
+    // Otherwise, call segment collision detection recursively
+    point_load_segment_level(b1, 1, b1->get_nelement(), b2, 1, b2->get_nelement());
+}
+
+void force_engine::point_load_segment_level(beam * b1, int start_element_1, int n_element_1,
+                                            beam * b2, int start_element_2, int n_element_2) {
+    // Base case, do element level check
+    if (n_element_1 == 1 && n_element_2 == 1) {
+        point_load_element_level(b1, start_element_1, b2, start_element_2);
+        return;
+    }
+
+    double gap = b1->get_thick()/2.0 + b2->get_thick()/2.0;
+
+    // In case n_element_1 = 1, only need to split n_element_2
+    if (n_element_1 == 1) {
+        // For beam 1
+        oriented_bounding_box obb_1 {};
+        obb_1.set_obb_info(utils::get_points_from_beam(b1, start_element_1, 1, 5));
+        // For beam 2
+        int n_element_21 = n_element_2/2;
+        int start_element_22 = start_element_2 + n_element_21;
+        oriented_bounding_box obb_21 {};
+        obb_21.set_obb_info(utils::get_points_from_beam(b2, start_element_2, n_element_21, 5));
+        oriented_bounding_box obb_22 {};
+        obb_22.set_obb_info(utils::get_points_from_beam(b2, start_element_22, n_element_2-n_element_21, 5));
+        // Check obb interaction
+        if (!obb_1.is_obb_disjoint(obb_21, gap)) {
+            point_load_segment_level(b1, start_element_1, n_element_1, b2, start_element_2, n_element_21);
+        }
+        if (!obb_1.is_obb_disjoint(obb_22, gap)) {
+            point_load_segment_level(b1, start_element_1, n_element_1, b2, start_element_22, n_element_2-n_element_21);
+        }
+        return;
+    }
+
+    // In case n_element_2 = 1, only need to split n_element_1
+    if (n_element_2 == 1) {
+        // For beam 1
+        int n_element_11 = n_element_1/2;
+        int start_element_12 = start_element_1 + n_element_11;
+        // Get obbs for each piece
+        oriented_bounding_box obb_11 {};
+        obb_11.set_obb_info(utils::get_points_from_beam(b1, start_element_1, n_element_11, 5));
+        oriented_bounding_box obb_12 {};
+        obb_12.set_obb_info(utils::get_points_from_beam(b1, start_element_12, n_element_1-n_element_11, 5));
+        // For beam 2
+        oriented_bounding_box obb_2 {};
+        obb_2.set_obb_info(utils::get_points_from_beam(b2, start_element_2, 1, 5));
+        // Check obb interaction
+        if (!obb_2.is_obb_disjoint(obb_11, gap)) {
+            point_load_segment_level(b1, start_element_1, n_element_11, b2, start_element_2, n_element_2);
+        }
+        if (!obb_2.is_obb_disjoint(obb_12, gap)) {
+            point_load_segment_level(b1, start_element_12, n_element_1-n_element_11, b2, start_element_2, n_element_2);
+        }
+        return;
+    }
+
+
+    // Otherwise, split both segments into two pieces, and check collision between pieces
+    // Beam 1
+    int n_element_11 = n_element_1/2;
+    int start_element_12 = start_element_1 + n_element_11;
+    // Get obbs for each piece
+    oriented_bounding_box obb_11 {};
+    obb_11.set_obb_info(utils::get_points_from_beam(b1, start_element_1, n_element_11, 5));
+    oriented_bounding_box obb_12 {};
+    obb_12.set_obb_info(utils::get_points_from_beam(b1, start_element_12, n_element_1-n_element_11, 5));
+    // Beam 2
+    int n_element_21 = n_element_2/2;
+    int start_element_22 = start_element_2 + n_element_21;
+    oriented_bounding_box obb_21 {};
+    obb_21.set_obb_info(utils::get_points_from_beam(b2, start_element_2, n_element_21, 5));
+    oriented_bounding_box obb_22 {};
+    obb_22.set_obb_info(utils::get_points_from_beam(b2, start_element_22, n_element_2-n_element_21, 5));
+    // Check obb interaction
+    if (!obb_11.is_obb_disjoint(obb_21, gap)) {
+        point_load_segment_level(b1, start_element_1, n_element_11, b2, start_element_2, n_element_21);
+    }
+    if (!obb_11.is_obb_disjoint(obb_22, gap)) {
+        point_load_segment_level(b1, start_element_1, n_element_11, b2, start_element_22, n_element_2-n_element_21);
+    }
+    if (!obb_12.is_obb_disjoint(obb_21, gap)) {
+        point_load_segment_level(b1, start_element_12, n_element_1-n_element_11, b2, start_element_2, n_element_21);
+    }
+    if (!obb_12.is_obb_disjoint(obb_22, gap)) {
+        point_load_segment_level(b1, start_element_12, n_element_1-n_element_11, b2, start_element_22, n_element_2-n_element_21);
+    }
+}
+
+void beam_section_obb()
