@@ -158,3 +158,19 @@ vector<Vector3d> get_points_from_beam(beam* b, int start_element, int n_element,
 vector<Vector3d> utils::get_points_from_beam_element(beam* b, int i_element, vector<double> positions) {
 
 }
+
+Vector3i get_level_3_centers(int n_particles) {
+    Vector3i n_centers;
+    int n_base = (int) 
+    if (n_particles >= 1000) {
+        n_centers << 10, 10, n_particles/100;
+    } else if (n_particles >= 729) {
+        n_centers << 9, 9, n_particles/81;
+    } else if (n_particles >= 512) {
+        n_centers << 8, 8, n_particles/64;
+    } else if (n_particles >= 343) {
+        n_centers << 7, 7, n_particles/49;
+    } else if (n_particles >= 216) {
+        n_centers << 6, 6, n_particles/36;
+    } else if (n_particles >= )
+}

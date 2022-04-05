@@ -267,5 +267,12 @@ void force_engine::point_load(beam * b1, int ielement_1, beam * b2, int ielement
     double R = 1.0 / (2.0/b1->get_thick() + 2.0/b2->get_thick());
     double K = 4.0 / 3.0 * E_star * sqrt(R);
 
+    // The particle level contact resolution will be done in three levels
+    // Using bounding sphere to do level 1 and level 2
+    // Using particle contact to do level 3
+    double l_element_1 = b1->get_length() / ((double) b1->get_nelement());
+    int n_particle_1 = (int) (l_element_1 / b1->get_thick());
+    int n_center_1 =
+    double l_element_2 = b2->get_length() / ((double) b2->get_nelement());
 
 }

@@ -16,6 +16,7 @@ public:
     static Matrix<double, 12, 12> element_mass_matrix(double, double);
     static vector<Vector3d> get_points_from_beam(beam*, int, int, int);
     static vector<Vector3d> get_points_from_beam_element(beam*, int, vector<double>);
+    static Vector3i get_level_3_centers(int);
 };
 
 
