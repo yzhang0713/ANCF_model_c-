@@ -153,25 +153,25 @@ Vector<double, 12> force_engine::flexural_force_integrand(Vector<double, 12> dis
     return ef_int;
 }
 
-void force_engine::add_constraint_load(int botCnstr, int topCnstr, Eigen::VectorXd & Q) {
+void force_engine::add_constraint_load(beam * b) {
     // Update force based on constraint
-    switch (botCnstr) {
+    switch (b->get_botCnstr()) {
         case 1:
-            Q.topRows(3) = Eigen::Vector3d::Zero();
+            b->get_total_force().topRows(3) = Eigen::Vector3d::Zero();
             break;
         case 2:
-            Q.topRows(6) = Eigen::Vector<double, 6>::Zero();
+            b->get_total_force().topRows(6) = Eigen::Vector<double, 6>::Zero();
             break;
         default:
             break;
     }
 
-    switch (topCnstr) {
+    switch (b->get_topCnstr()) {
         case 1:
-            Q.bottomRows(3) = Eigen::Vector3d::Zero();
+            b->get_total_force().bottomRows(3) = Eigen::Vector3d::Zero();
             break;
         case 2:
-            Q.bottomRows(6) = Eigen::Vector<double, 6>::Zero();
+            b->get_total_force().bottomRows(6) = Eigen::Vector<double, 6>::Zero();
             break;
         default:
             break;

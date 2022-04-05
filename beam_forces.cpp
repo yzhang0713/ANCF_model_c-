@@ -31,3 +31,11 @@ void beam_forces::set_Q_point(VectorXd Qp) {
 VectorXd beam_forces::get_Q_point() {
     return Q_point;
 }
+
+void beam_forces::set_Q_total(VectorXd Qt) {
+    Q_total = Qt;
+}
+
+VectorXd beam_forces::get_Q_total() {
+    return Q_total;
+}

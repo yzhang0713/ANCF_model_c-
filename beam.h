@@ -54,10 +54,12 @@ public:
     void set_elastic_force(VectorXd Qe) {forces->set_Q_elastic(Qe);};
     void set_dist_force(VectorXd Qd) {forces->set_Q_dist(Qd);};
     void set_point_force(VectorXd Qp) {forces->set_Q_point(Qp);};
+    void set_total_force();
     VectorXd get_gravity_force() {return forces->get_Q_gravity();};
     VectorXd get_elastic_force() {return forces->get_Q_elastic();};
     VectorXd get_dist_force() {return forces->get_Q_dist();};
     VectorXd get_point_force() {return forces->get_Q_dist();};
+    VectorXd get_total_force() {return forces->get_Q_total();};
     MatrixXd get_mass_matrix() {return mass_matrix;};
     friend ostream& operator<<(ostream&, const beam&);
 };

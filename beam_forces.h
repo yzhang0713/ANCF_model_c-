@@ -11,6 +11,7 @@ private:
     VectorXd Q_elastic;         // Elastic force
     VectorXd Q_dist;            // Distributed external force
     VectorXd Q_point;           // Concentrated external force
+    VectorXd Q_total;                 // Total force
 public:
     beam_forces() = default;
     ~beam_forces() = default;
@@ -22,6 +23,8 @@ public:
     VectorXd get_Q_dist();
     void set_Q_point(VectorXd Qp);
     VectorXd get_Q_point();
+    void set_Q_total(VectorXd Qt);
+    VectorXd get_Q_total();
 };
 
 

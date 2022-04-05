@@ -22,7 +22,7 @@ public:
     ~force_engine() = default;
     void gravity_force(beam *);
     void elastic_force(beam *);
-    void add_constraint_load(int, int, VectorXd &);
+    void add_constraint_load(beam *);
     void distributed_load(beam *, fluid_field *, double);
     void point_load_element_level(beam *, int, beam *, int);
     void point_load(beam*, beam*);

@@ -248,3 +248,15 @@ void system_engine::update_beam_point_forces() {
         }
     }
 }
+
+void system_engine::update_beam_total_forces() {
+    for (beam * b : beams) {
+        b->set_total_force();
+    }
+}
+
+void system_engine::update_beam_forces_with_constraint() {
+    for (beam * b : beams) {
+        f_engine->add_constraint_load(b);
+    }
+}

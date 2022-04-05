@@ -41,6 +41,11 @@ void beam::set_mass_matrix() {
     }
 }
 
+void beam::set_total_force() {
+    forces->set_Q_total(forces->get_Q_gravity() + forces->get_Q_dist()
+                        + forces->get_Q_point() - forces->get_Q_elastic());
+}
+
 ostream& operator<<(ostream& os, const beam& b) {
     os << "Beam details: " << endl;
     os << "    E - " << b.E << endl;
