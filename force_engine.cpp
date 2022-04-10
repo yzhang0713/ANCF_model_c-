@@ -308,7 +308,9 @@ void force_engine::point_load_element_level(beam * b1, int ielement_1, beam * b2
 
     // Second level of overlap check
     map<int, vector<int>> level_2_overlap;
-    for (const auto& [n1, n2_list] : level_1_overlap) {
+    for (auto const& x : level_1_overlap) {
+        int n1 = x.first;
+        vector<int> n2_list = x.second;
         vector<double> level_2_pos_1;
         int add_1 = n1 * n_centers_1(1);
         int base_1 = n_centers_1(1) * n_centers_1(0);
@@ -341,7 +343,9 @@ void force_engine::point_load_element_level(beam * b1, int ielement_1, beam * b2
     }
 
     // Third level (particle level) of overlap check
-    for (const auto& [n1, n2_list] : level_2_overlap) {
+    for (auto const& x  : level_2_overlap) {
+        int n1 = x.first;
+        vector<int> n2_list = x.second;
         vector<double> level_3_pos_1;
         int add_1 = n1 * n_centers_1(2);
         int base_1 = n_centers_1.prod();
@@ -498,5 +502,3 @@ void force_engine::point_load_segment_level(beam * b1, int start_element_1, int 
         point_load_segment_level(b1, start_element_12, n_element_1-n_element_11, b2, start_element_22, n_element_2-n_element_21);
     }
 }
-
-void beam_section_obb()

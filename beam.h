@@ -10,6 +10,7 @@ using namespace Eigen;
 
 class beam {
 private:
+    int beam_id;
     double E = 8.0e8;               // Young's modulus (Pa)
     double nu = 0.3;                // Poisson's ratio
     double rho = 8.5e2;             // Density (kg/m^3)
@@ -27,14 +28,20 @@ private:
     VectorXd acceleration;  // Acceleration vector of beam (m/s^2)
     beam_forces * forces;     // All forces of beam
     MatrixXd mass_matrix;   // Mass matrix of beam
+    FullPivLU<MatrixXd> mass_LU; // LU decomposition of mass matrix
     friend class beam_builder;
 public:
+    static int counter;
     beam() = default;
+    beam(const beam &);
     ~beam() = default;
+    void set_beam_id();
     void set_area();
     void set_inertia();
     void set_ndof();
     void set_mass_matrix();
+    void set_mass_LU();
+    int get_beam_id() {return beam_id;};
     double get_E() {return E;}
     double get_nu() {return nu;}
     double get_rho() {return rho;}
@@ -61,6 +68,10 @@ public:
     VectorXd get_point_force() {return forces->get_Q_dist();};
     VectorXd get_total_force() {return forces->get_Q_total();};
     MatrixXd get_mass_matrix() {return mass_matrix;};
+    FullPivLU<MatrixXd> get_mass_LU() {return mass_LU;};
+    void update_position(VectorXd pos) {position = pos;};
+    void update_velocity(VectorXd vel) {velocity = vel;};
+    void update_acceleration(VectorXd acc) {acceleration = acc;};
     friend ostream& operator<<(ostream&, const beam&);
 };
 

@@ -1,4 +1,7 @@
 #include "system_engine.h"
+#include <filesystem>
+
+namespace fs = filesystem;
 
 system_engine::system_engine() {
     f_engine = new force_engine();
@@ -258,5 +261,74 @@ void system_engine::update_beam_total_forces() {
 void system_engine::update_beam_forces_with_constraint() {
     for (beam * b : beams) {
         f_engine->add_constraint_load(b);
+    }
+}
+
+VectorXd system_engine::solving_linear_system_of_beam(beam * b) {
+    return (b->get_mass_LU().solve(b->get_total_force()));
+}
+
+void system_engine::store_beam_information() {
+    for (beam * b : beams) {
+        beam_pos_record[b->get_beam_id()].push_back(b->get_position());
+        beam_vel_record[b->get_beam_id()].push_back(b->get_velocity());
+        beam_acc_record[b->get_beam_id()].push_back(b->get_acceleration());
+    }
+}
+
+void system_engine::update_beams() {
+    for (beam * b : beams) {
+        time_march::range_kutta(b, t, h, this);
+    }
+}
+
+void system_engine::write_to_file() {
+    check_output_folder();
+    // Write outputs to each beam
+    for (auto const& x : beam_pos_record) {
+        int beam_id = x.first;
+        string pos_name("./outputs/" + to_string(beam_id) + "/position");
+        ofstream pos_file;
+        pos_file.open(pos_name, ios_base::app);
+        for (VectorXd pos : beam_pos_record[beam_id]) {
+            pos_file << pos << endl;
+        }
+        pos_file.close();
+        string vel_name("./outputs/" + to_string(beam_id) + "/velocity");
+        ofstream vel_file;
+        vel_file.open(vel_name, ios_base::app);
+        for (VectorXd vel : beam_vel_record[beam_id]) {
+            vel_file << vel << endl;
+        }
+        vel_file.close();
+        string acc_name("./outputs/" + to_string(beam_id) + "/acceleration");
+        ofstream acc_file;
+        acc_file.open(acc_name, ios_base::app);
+        for (VectorXd acc : beam_acc_record[beam_id]) {
+            acc_file << acc << endl;
+        }
+        acc_file.close();
+    }
+    beam_pos_record.clear();
+    beam_vel_record.clear();
+    beam_acc_record.clear();
+}
+
+void system_engine::check_output_folder() {
+    if (!fs::exists("./outputs")) {
+        // Create output folder
+        fs::create_directories("./outputs");
+        for (auto const& x : beam_pos_record) {
+            int beam_id = x.first;
+            // Create folder for each beam
+            fs::create_directories("./outputs/" + to_string(beam_id));
+            // Create file for beam position, velocity, and acceleration
+            ofstream pos_file("./outputs/" + to_string(beam_id) + "/position");
+            pos_file.close();
+            ofstream vel_file("./outputs/" + to_string(beam_id) + "/velocity");
+            vel_file.close();
+            ofstream acc_file("./outputs/" + to_string(beam_id) + "/acceleration");
+            acc_file.close();
+        }
     }
 }

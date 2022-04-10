@@ -1,5 +1,31 @@
 #include "beam.h"
 
+int beam::counter = 1;
+
+beam::beam(const beam & b) {
+    E = b.E;
+    nu = b.nu;
+    rho = b.rho;
+    length = b.length;
+    thick = b.thick;
+    width = b.width;
+    area = b.area;
+    inertia = b.inertia;
+    nelement = b.nelement;
+    ndof = b.ndof;
+    botCnstr = b.botCnstr;
+    topCnstr = b.topCnstr;
+    position = b.position;
+    velocity = b.velocity;
+    mass_LU = b.mass_LU;
+    forces = new beam_forces();
+}
+
+void beam::set_beam_id() {
+    beam_id = counter;
+    counter++;
+}
+
 void beam::set_area() {
     area = thick * width;
 }
@@ -39,6 +65,10 @@ void beam::set_mass_matrix() {
             mass_matrix(ndof-i,ndof-i) = 1.0;
         }
     }
+}
+
+void beam::set_mass_LU() {
+    mass_LU = mass_matrix.fullPivLu();
 }
 
 void beam::set_total_force() {
@@ -127,9 +157,11 @@ void beam_builder::set_acceleration(VectorXd acceleration) {
 }
 
 beam *beam_builder::get_beam() {
+    this->b->set_beam_id();
     this->b->set_area();
     this->b->set_inertia();
     this->b->set_mass_matrix();
+    this->b->set_mass_LU();
     this->b->forces = new beam_forces();
     beam* result = this->b;
     this->Reset();

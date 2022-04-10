@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <math.h>
 #include <iostream>
+#include "beam.h"
 
 // This method will return the gauss points for numerical integration
 void utils::gauss_points(int n, vector<double> &x, vector<double> &weight) {
@@ -133,7 +134,7 @@ Matrix<double, 12, 12> utils::element_mass_matrix(double L, double factor) {
     return mass_matrix;
 }
 
-vector<Vector3d> get_points_from_beam(beam* b, int start_element, int n_element, int n_point) {
+vector<Vector3d> utils::get_points_from_beam(beam* b, int start_element, int n_element, int n_point) {
     vector<Vector3d> points;
     if (n_point <= 1) {
         return points;

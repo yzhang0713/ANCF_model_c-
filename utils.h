@@ -2,13 +2,12 @@
 #define ANCF_MODEL_C___UTILS_H
 #include <vector>
 #include <Eigen/Dense>
-#include "beam.h"
 #include "bounding_sphere.h"
 
 using namespace std;
 using namespace Eigen;
 
-
+class beam;
 class utils {
 public:
     static void gauss_points(int, vector<double>&, vector<double>&);
