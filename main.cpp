@@ -68,6 +68,9 @@ int main() {
         // Update point load based on new position
         s.reset_beam_point_forces();
         s.update_beam_point_forces();
+        if (s.check_write()) {
+            s.write_to_file();
+        }
     }
 
     return 0;

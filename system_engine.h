@@ -58,6 +58,7 @@ public:
     void update_beams();
     void check_output_folder();
     void write_to_file();
+    int check_write();
 };
 
 

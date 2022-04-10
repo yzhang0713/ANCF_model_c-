@@ -10,17 +10,17 @@ system_engine::system_engine() {
 
 void system_engine::read_beams() {
     ifstream beam_file;
-    beam_file.open("input_beam");
+    beam_file.open("./inputs/input_beam");
     ifstream beam_init_position;
-    beam_init_position.open("input_beam_position");
+    beam_init_position.open("./inputs/input_beam_position");
     ifstream beam_init_velocity;
-    beam_init_velocity.open("input_beam_velocity");
+    beam_init_velocity.open("./inputs/input_beam_velocity");
     int def_vel = 0;
     if (beam_init_velocity) {
         def_vel = 1;
     }
     ifstream beam_init_acceleration;
-    beam_init_acceleration.open("input_beam_acceleration");
+    beam_init_acceleration.open("./inputs/input_beam_acceleration");
     int def_acc = 0;
     if (beam_init_acceleration) {
         def_acc = 1;
@@ -35,6 +35,7 @@ void system_engine::read_beams() {
         int nelement, botCnstr, topCnstr;
         if (!(iss >> E >> nu >> rho >> length >> thick >> width >> nelement >> botCnstr >> topCnstr)) {
             cout << "Error reading beam file." << endl;
+            break;
         }
         beam_builder * b_builder = new beam_builder();
         b_builder->set_E(E);
@@ -103,17 +104,17 @@ void system_engine::test_read_beams() {
 
 void system_engine::read_particles() {
     ifstream par_file;
-    par_file.open("input_particle");
+    par_file.open("./inputs/input_particle");
     ifstream par_init_position;
-    par_init_position.open("input_particle_position");
+    par_init_position.open("./inputs/input_particle_position");
     ifstream par_init_velocity;
-    par_init_velocity.open("input_particle_velocity");
+    par_init_velocity.open("./inputs/input_particle_velocity");
     int def_vel = 0;
     if (par_init_velocity) {
         def_vel = 1;
     }
     ifstream par_init_acceleration;
-    par_init_acceleration.open("input_particle_acceleration");
+    par_init_acceleration.open("./inputs/input_particle_acceleration");
     int def_acc = 0;
     if (par_init_acceleration) {
         def_acc = 1;
@@ -126,7 +127,8 @@ void system_engine::read_particles() {
         istringstream iss(par_line);
         double E, rho, r;
         if (!(iss >> E >> rho >> r)) {
-            cout << "Error reading beam file." << endl;
+            cout << "Error reading particle file." << endl;
+            break;
         }
         particle_builder * p_builder = new particle_builder();
         p_builder->set_E(E);
@@ -331,4 +333,8 @@ void system_engine::check_output_folder() {
             acc_file.close();
         }
     }
+}
+
+int system_engine::check_write() {
+    return beam_pos_record.size() >= 1000;
 }
