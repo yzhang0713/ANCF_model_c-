@@ -18,6 +18,11 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     } else {
         b_xi_1.set_dist_force(q_zero);
     }
+    if (s_engine->get_damping_force_switch()) {
+        s_engine->get_force_engine()->damping_load(&b_xi_1);
+    } else {
+        b_xi_1.set_damping_force(q_zero);
+    }
     b_xi_1.set_total_force();
     s_engine->get_force_engine()->add_constraint_load(&b_xi_1);
     VectorXd acc_xi_1 = s_engine->solving_linear_system_of_beam(&b_xi_1);
@@ -36,6 +41,11 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
         s_engine->get_force_engine()->distributed_load(&b_xi_2, s_engine->get_fluid_field(), t+0.5*h);
     } else {
         b_xi_2.set_dist_force(q_zero);
+    }
+    if (s_engine->get_damping_force_switch()) {
+        s_engine->get_force_engine()->damping_load(&b_xi_2);
+    } else {
+        b_xi_2.set_damping_force(q_zero);
     }
     b_xi_2.set_total_force();
     s_engine->get_force_engine()->add_constraint_load(&b_xi_2);
@@ -56,6 +66,11 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     } else {
         b_xi_3.set_dist_force(q_zero);
     }
+    if (s_engine->get_damping_force_switch()) {
+        s_engine->get_force_engine()->damping_load(&b_xi_3);
+    } else {
+        b_xi_3.set_damping_force(q_zero);
+    }
     b_xi_3.set_total_force();
     s_engine->get_force_engine()->add_constraint_load(&b_xi_3);
     VectorXd acc_xi_3 = s_engine->solving_linear_system_of_beam(&b_xi_3);
@@ -72,6 +87,9 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     s_engine->get_force_engine()->elastic_force(b);
     if (s_engine->get_distributed_force_switch()) {
         s_engine->get_force_engine()->distributed_load(b, s_engine->get_fluid_field(), t+h);
+    }
+    if (s_engine->get_damping_force_switch()) {
+        s_engine->get_force_engine()->damping_load(b);
     }
     b->set_total_force();
     s_engine->get_force_engine()->add_constraint_load(b);

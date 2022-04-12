@@ -64,26 +64,34 @@ void utils::gauss_points(int n, vector<double> &x, vector<double> &weight) {
 //      der = 2, return S_xx
 void utils::shape_fun(double x, double L, int der, Vector4d &S) {
     double xi = x / L;
+//    cout << "x: " << x << endl;
+//    cout << "L: " << L << endl;
+//    cout << "der: " << der << endl;
+//    cout << "xi: " << xi << endl;
     switch (der) {
         case 0: {
             S(0) = 1.0 - 3.0 * xi * xi + 2.0 * xi * xi * xi;
             S(1) = L * (xi - 2.0 * xi * xi + xi * xi * xi);
             S(2) = 3.0 * xi * xi - 2.0 * xi * xi * xi;
             S(3) = L * (- xi * xi + xi * xi * xi);
+            break;
         }
         case 1: {
             S(0) = (- 6.0 * xi + 6.0 * xi * xi) / L;
             S(1) = 1.0 - 4.0 * xi + 3.0 * xi * xi;
             S(2) = (6.0 * xi - 6.0 * xi * xi) / L;
             S(3) = -2.0 * xi + 3.0 * xi * xi;
+            break;
         }
         case 2: {
             S(0) = (- 6.0 + 12.0 * xi) / (L * L);
             S(1) = (- 4.0 + 6.0 * xi) / L;
             S(2) = (6.0 - 12.0 * xi) / (L * L);
             S(3) = (-2.0 + 6.0 * xi) / L;
+            break;
         }
     }
+//    cout << "S: " << S.transpose() << endl;
 }
 
 // Provide the matrix form of vector to help compute the cross product
@@ -201,6 +209,7 @@ Matrix<double, 3, 12> utils::get_shape_matrix(Vector4d & S) {
 Matrix<double, 3, 12> utils::get_shape_matrix(double x, double L, int der) {
     Vector4d S;
     utils::shape_fun(x, L, der, S);
+    cout << "shape vector S:" << S.transpose() << endl;
     Matrix<double, 3, 12> S_mat;
     S_mat.setZero();
     for (int ii = 0; ii < 4; ii++) {

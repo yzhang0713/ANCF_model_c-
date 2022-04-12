@@ -36,6 +36,8 @@ private:
     int point_force_switch;
     int external_load_switch;
     int damping_force_switch;
+    int gravity_force_switch;
+    int debug = 0;
 public:
     system_engine();
     ~system_engine() = default;
@@ -76,10 +78,12 @@ public:
     void beam_point_force_off();
     void beam_external_force_off();
     void beam_damping_force_off();
+    void beam_gravity_force_off();
     int get_distributed_force_switch() {return distributed_force_switch;};
     int get_point_force_switch() {return point_force_switch;};
     int get_external_force_switch() {return external_load_switch;};
     int get_damping_force_switch() {return damping_force_switch;};
+    int get_gravity_force_switch() {return gravity_force_switch;};
 };
 
 

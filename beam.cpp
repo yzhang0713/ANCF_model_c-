@@ -78,7 +78,7 @@ void beam::set_mass_LU() {
 void beam::set_total_force() {
     forces->set_Q_total(forces->get_Q_gravity() + forces->get_Q_dist()
                         + forces->get_Q_point() + forces->get_Q_external()
-                        - forces->get_Q_elastic());
+                        - forces->get_Q_elastic() + forces->get_Q_damping());
 }
 
 ostream& operator<<(ostream& os, const beam& b) {

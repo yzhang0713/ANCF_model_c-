@@ -43,7 +43,9 @@ void system_engine::read_beams() {
     string beam_vel;
     string beam_acc;
     while (getline(beam_file, beam_line)) {
-        cout << "value in beam file: " << beam_line << endl;
+        if (debug) {
+            cout << "value in beam file: " << beam_line << endl;
+        }
         istringstream iss(beam_line);
         double E, nu, rho, length, thick, width;
         int nelement, botCnstr, topCnstr;
@@ -108,7 +110,9 @@ void system_engine::read_beams() {
     if (def_acc) {
         beam_init_acceleration.close();
     }
-    cout << "number of beams: " << beams.size() << endl;
+    if (debug) {
+        cout << "number of beams: " << beams.size() << endl;
+    }
 }
 
 void system_engine::test_read_beams() {
@@ -263,24 +267,36 @@ void system_engine::test_read_fluid_field() {
 void system_engine::update_beam_gravity_forces() {
     for (beam * b : beams) {
         f_engine->gravity_force(b);
+        if (debug) {
+            cout << "gravity force" << b->get_gravity_force().transpose() << endl;
+        }
     }
 }
 
 void system_engine::update_beam_elastic_forces() {
     for (beam * b : beams) {
         f_engine->elastic_force(b);
+        if (debug) {
+            cout << "elastic force" << b->get_elastic_force().transpose() << endl;
+        }
     }
 }
 
 void system_engine::update_beam_dist_forces() {
     for (beam * b : beams) {
         f_engine->distributed_load(b, f_field, t);
+        if (debug) {
+            cout << "distributed force" << b->get_dist_force().transpose() << endl;
+        }
     }
 }
 
 void system_engine::reset_beam_point_forces() {
     for (beam * b : beams) {
         b->set_point_force(VectorXd::Zero(b->get_ndof()));
+        if (debug) {
+            cout << "reset point forces" << b->get_point_force().transpose() << endl;
+        }
     }
 }
 
@@ -295,18 +311,27 @@ void system_engine::update_beam_point_forces() {
 void system_engine::update_beam_external_forces() {
     for (beam * b : beams) {
         f_engine->external_load(b, el_field);
+        if (debug) {
+            cout << "external force" << b->get_external_force().transpose() << endl;
+        }
     }
 }
 
 void system_engine::update_beam_damping_forces() {
     for (beam * b : beams) {
         f_engine->damping_load(b);
+        if (debug) {
+            cout << "damping force" << b->get_damping_force().transpose() << endl;
+        }
     }
 }
 
 void system_engine::update_beam_total_forces() {
     for (beam * b : beams) {
         b->set_total_force();
+        if (debug) {
+            cout << "total force" << b->get_total_force().transpose() << endl;
+        }
     }
 }
 
@@ -439,5 +464,12 @@ void system_engine::beam_damping_force_off() {
     for (beam * b : beams) {
         VectorXd q = VectorXd::Zero(b->get_ndof());
         b->set_damping_force(q);
+    }
+}
+
+void system_engine::beam_gravity_force_off() {
+    for (beam * b : beams) {
+        VectorXd q = VectorXd::Zero(b->get_ndof());
+        b->set_gravity_force(q);
     }
 }

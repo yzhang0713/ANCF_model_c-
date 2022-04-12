@@ -68,20 +68,33 @@ void force_engine::elastic_force(beam * b) {
         Qn = VectorXd::Zero(12);
         for (int k = 0; k < 5; k++) {
             double x = (1.0 + x5[k]) * lelement / 2.0;
-            Qn += weight5[k] * axial_force_integrand(disp_cur.middleRows(6*i, 12), x, lelement);
+            Qn += (weight5[k] * axial_force_integrand(disp_cur.segment(6*i, 12), x, lelement));
+            if (debug) {
+                cout << "After " << k << " round for element " << i << endl;
+                cout << "Qn " << Qn.transpose() << endl;
+            }
+
         }
         Qn *= (E * area * lelement / 2.0);
+
+        if (debug) {
+            cout << "Axial force for element " << i << " is " << Qn.transpose() << endl;
+        }
 
         // Calculate elastic force due to flexural deformation
         Qf = VectorXd::Zero(12);
         for (int k = 0; k < 3; k++) {
             double x = (1.0 + x3[k]) * lelement / 2.0;
-            Qf += weight3[k] * flexural_force_integrand(disp_cur.middleRows(6*i, 12), x, lelement);
+            Qf += (weight3[k] * flexural_force_integrand(disp_cur.segment(6*i, 12), x, lelement));
         }
         Qf *= (E * inertia * lelement / 2.0);
 
+        if (debug) {
+            cout << "Flexible force for element " << i << " is " << Qf.transpose() << endl;
+        }
+
         // Add the two sources of elastic force
-        Qe.middleRows(6*i, 12) += (Qn + Qf);
+        Qe.segment(6*i, 12) += (Qn + Qf);
     }
 
     // Set elastic force
@@ -92,16 +105,31 @@ Vector<double, 12> force_engine::axial_force_integrand(Vector<double, 12> disp, 
     // First derivative of shape function with respect to x
     Vector<double, 4> Sx;
     utils::shape_fun(x, lelement, 1, Sx);
+    if (debug) {
+        cout << "x " << x << endl;
+        cout << "lelement " << lelement << endl;
+        cout << "Sx " << Sx.transpose() << endl;
+    }
 
     // First derivative of position vector r with respect to x
     Vector3d rx;
     Matrix<double, 3, 4> disp_rs;
-    disp_rs = disp.reshaped(3,4);
+    disp_rs = disp.transpose().reshaped(3,4);
     rx = disp_rs * Sx;
+//    Matrix<double, 3, 12> Sx_mat = utils::get_shape_matrix(x, lelement, 1);
+//    rx = Sx_mat*disp;
 
+    if (debug) {
+        cout << "displacement " << disp.transpose() << endl;
+//        cout << "displacement matrix " << disp_rs << endl;
+    }
     // Axial strain of element
     double epsilon;
     epsilon = (rx.dot(rx) - 1.0) / 2.0;
+
+    if (debug) {
+        cout << "axial strain " << epsilon << endl;
+    }
 
     // Partial derivative of axial strain to base vector e
     Vector<double, 12> epsilon_e;
@@ -537,6 +565,7 @@ void force_engine::external_load(beam * b, external_load_field * el_field) {
             // Meaning force at tip of beam
             Matrix<double, 3, 12> S_mat = utils::get_shape_matrix(l_element, l_element, 0);
             cout << "shape matrix " << S_mat << endl;
+            cout << "force " << force.transpose() << endl;
             b->get_external_force().tail(12) += ((S_mat.transpose())*force);
             cout << "assign force done" << endl;
         } else {
@@ -548,5 +577,5 @@ void force_engine::external_load(beam * b, external_load_field * el_field) {
 }
 
 void force_engine::damping_load(beam * b) {
-    b->set_damping_force(-0.10 * b->get_velocity());
+    b->set_damping_force(-0.02 * b->get_velocity());
 }
