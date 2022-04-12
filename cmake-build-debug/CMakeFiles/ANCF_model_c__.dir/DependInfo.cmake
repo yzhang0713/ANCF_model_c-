@@ -21,7 +21,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "C:/YuZhang/GitRepo/ANCF_model_cpp/time_march.cpp" "C:/YuZhang/GitRepo/ANCF_model_cpp/cmake-build-debug/CMakeFiles/ANCF_model_c__.dir/time_march.cpp.obj"
   "C:/YuZhang/GitRepo/ANCF_model_cpp/utils.cpp" "C:/YuZhang/GitRepo/ANCF_model_cpp/cmake-build-debug/CMakeFiles/ANCF_model_c__.dir/utils.cpp.obj"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "MSVC")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

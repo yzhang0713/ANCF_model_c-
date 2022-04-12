@@ -8,6 +8,7 @@
 #include "fluid_field.h"
 #include "utils.h"
 #include "oriented_bounding_box.h"
+#include "external_load_field.h"
 
 using namespace Eigen;
 using namespace std;
@@ -27,6 +28,8 @@ public:
     void point_load_element_level(beam *, int, beam *, int);
     void point_load(beam*, beam*);
     void point_load_segment_level(beam*, int, int, beam*, int, int);
+    void external_load(beam *, external_load_field* el_field);
+    void damping_load(beam *);
 };
 
 

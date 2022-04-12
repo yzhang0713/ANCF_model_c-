@@ -35,10 +35,11 @@ int main() {
 
     // Read beams and particles from files
     s.read_beams();
+    cout << "Read beam done" << endl;
+    s.test_read_beams();
     s.read_particles();
 
     // Test files reading
-    s.test_read_beams();
     s.test_read_particles();
 
     // Read fluid field
@@ -47,17 +48,56 @@ int main() {
     // Test fluid field reading
     s.test_read_fluid_field();
 
+    cout << "test fluid field done" << endl;
+
+    // Read external load field
+    s.read_external_load_field();
+
+    // Load force switches
+    s.load_switches();
+
     // Initialize all forces
     s.update_beam_gravity_forces();
+    cout << "update gravity force done" << endl;
     s.update_beam_elastic_forces();
-    s.update_beam_dist_forces();
+    cout << "update elastic force done" << endl;
+    if (s.get_distributed_force_switch()) {
+        s.update_beam_dist_forces();
+    } else {
+        s.beam_dist_force_off();
+    }
+    cout << "update distributed force done" << endl;
     s.reset_beam_point_forces();
-    s.update_beam_point_forces();
+    cout << "reset point force done" << endl;
+    if (s.get_point_force_switch()) {
+        s.update_beam_point_forces();
+    } else {
+        s.beam_point_force_off();
+    }
+    cout << "update point force done" << endl;
+    if (s.get_external_force_switch()) {
+        s.update_beam_external_forces();
+    } else {
+        s.beam_external_force_off();
+    }
+    cout << "update external force done" << endl;
+    if (s.get_damping_force_switch()) {
+        s.update_beam_damping_forces();
+    } else {
+        s.beam_damping_force_off();
+    }
+    cout << "update damping force done" << endl;
     s.update_beam_total_forces();
+    cout << "update total force done" << endl;
     s.update_beam_forces_with_constraint();
+    cout << "update constraint done" << endl;
+
+    cout << "initialize beam forces done" << endl;
 
     // Start time marching
-    double t_end = 100.0;
+    s.initialize_time();
+    s.set_time_step(0.0001);
+    double t_end = 1.0;
     while (s.get_cur_time() < t_end) {
         // Store current beam information
         s.store_beam_information();
@@ -67,11 +107,18 @@ int main() {
         s.update_time();
         // Update point load based on new position
         s.reset_beam_point_forces();
-        s.update_beam_point_forces();
+        if (s.get_point_force_switch()) {
+            s.update_beam_point_forces();
+        }
+        if (s.get_damping_force_switch()) {
+            s.update_beam_damping_forces();
+        }
         if (s.check_write()) {
             s.write_to_file();
         }
+        cout << "current time " << s.get_cur_time() << endl;
     }
+    s.write_to_file();
 
     return 0;
 }

@@ -205,7 +205,7 @@ Matrix<double, 3, 12> utils::get_shape_matrix(double x, double L, int der) {
     S_mat.setZero();
     for (int ii = 0; ii < 4; ii++) {
         for (int jj = 0; jj < 3; jj++) {
-            S_mat(jj, 3*(ii-1)+jj) = S(ii);
+            S_mat(jj, 3*ii+jj) = S(ii);
         }
     }
     return S_mat;

@@ -16,6 +16,14 @@ VectorXd beam_forces::get_Q_elastic() {
     return Q_elastic;
 }
 
+void beam_forces::set_Q_damping(VectorXd Qd) {
+    Q_damping = Qd;
+}
+
+VectorXd beam_forces::get_Q_damping() {
+    return Q_damping;
+}
+
 void beam_forces::set_Q_dist(VectorXd Qd) {
     Q_dist = Qd;
 }
@@ -30,6 +38,14 @@ void beam_forces::set_Q_point(VectorXd Qp) {
 
 VectorXd beam_forces::get_Q_point() {
     return Q_point;
+}
+
+void beam_forces::set_Q_external(VectorXd Qe) {
+    Q_external = Qe;
+}
+
+VectorXd beam_forces::get_Q_external() {
+    return Q_external;
 }
 
 void beam_forces::set_Q_total(VectorXd Qt) {

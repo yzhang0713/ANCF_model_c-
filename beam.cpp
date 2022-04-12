@@ -43,8 +43,11 @@ void beam::set_mass_matrix() {
     double l_element = length / nelement;
     double factor = rho * area * l_element;
     Matrix<double, 12, 12> mass_element = utils::element_mass_matrix(l_element, factor);
+//    cout << "mass element done" << endl;
     // Assemble to get the global mass matrix of the beam
-    mass_matrix(ndof, ndof);
+    mass_matrix = MatrixXd::Zero(ndof, ndof);
+//    cout << "ndof " << ndof << endl;
+//    cout << "nelement " << nelement << endl;
     mass_matrix.setZero();
     for (int i = 0; i < nelement; i++) {
         mass_matrix.block(6*i,6*i,6,6) += mass_element.topLeftCorner(6,6);
@@ -65,6 +68,7 @@ void beam::set_mass_matrix() {
             mass_matrix(ndof-i,ndof-i) = 1.0;
         }
     }
+//    cout << "mass matrix done" << endl;
 }
 
 void beam::set_mass_LU() {
@@ -73,7 +77,8 @@ void beam::set_mass_LU() {
 
 void beam::set_total_force() {
     forces->set_Q_total(forces->get_Q_gravity() + forces->get_Q_dist()
-                        + forces->get_Q_point() - forces->get_Q_elastic());
+                        + forces->get_Q_point() + forces->get_Q_external()
+                        - forces->get_Q_elastic());
 }
 
 ostream& operator<<(ostream& os, const beam& b) {
@@ -142,6 +147,7 @@ void beam_builder::set_position(VectorXd position) {
 
 void beam_builder::set_velocity() {
     this->b->velocity = VectorXd::Zero(this->b->ndof);
+    cout << "beam velocity: " << this->b->velocity << endl;
 }
 
 void beam_builder::set_velocity(VectorXd velocity) {

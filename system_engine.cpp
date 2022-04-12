@@ -5,7 +5,20 @@ namespace fs = filesystem;
 
 system_engine::system_engine() {
     f_engine = new force_engine();
+    el_field = new external_load_field();
     t = 0.0;
+}
+
+void system_engine::initialize_time() {
+    t = 0.0;
+}
+
+void system_engine::set_current_time(double time) {
+    t = time;
+}
+
+void system_engine::set_time_step(double time_step) {
+    h = time_step;
 }
 
 void system_engine::read_beams() {
@@ -30,6 +43,7 @@ void system_engine::read_beams() {
     string beam_vel;
     string beam_acc;
     while (getline(beam_file, beam_line)) {
+        cout << "value in beam file: " << beam_line << endl;
         istringstream iss(beam_line);
         double E, nu, rho, length, thick, width;
         int nelement, botCnstr, topCnstr;
@@ -47,7 +61,7 @@ void system_engine::read_beams() {
         b_builder->set_nelement(nelement);
         b_builder->set_botCnstr(botCnstr);
         b_builder->set_topCnstr(topCnstr);
-        int ndof = b_builder->get_beam()->get_ndof();
+        int ndof = 6 * (nelement + 1);
         getline(beam_init_position, beam_pos);
         istringstream iss_pos(beam_pos);
         VectorXd pos(ndof);
@@ -57,7 +71,7 @@ void system_engine::read_beams() {
             pos(i) = cur_pos;
         }
         b_builder->set_position(pos);
-        if (def_vel) {
+        if (!def_vel) {
             b_builder->set_velocity();
         } else {
             getline(beam_init_velocity, beam_vel);
@@ -70,7 +84,7 @@ void system_engine::read_beams() {
             }
             b_builder->set_velocity(vel);
         }
-        if (def_acc) {
+        if (!def_acc) {
             b_builder->set_acceleration();
         } else {
             getline(beam_init_acceleration, beam_acc);
@@ -88,12 +102,13 @@ void system_engine::read_beams() {
     }
     beam_file.close();
     beam_init_position.close();
-    if (!def_vel) {
+    if (def_vel) {
         beam_init_velocity.close();
     }
-    if (!def_acc) {
+    if (def_acc) {
         beam_init_acceleration.close();
     }
+    cout << "number of beams: " << beams.size() << endl;
 }
 
 void system_engine::test_read_beams() {
@@ -141,7 +156,7 @@ void system_engine::read_particles() {
         iss_pos >> pos1 >> pos2 >> pos3;
         pos << pos1, pos2, pos3;
         p_builder->set_position(pos);
-        if (def_vel) {
+        if (!def_vel) {
             p_builder->set_velocity();
         } else {
             getline(par_init_velocity, par_vel);
@@ -152,7 +167,7 @@ void system_engine::read_particles() {
             vel << vel1, vel2, vel3;
             p_builder->set_velocity(vel);
         }
-        if (def_acc) {
+        if (!def_acc) {
             p_builder->set_acceleration();
         } else {
             getline(par_init_acceleration, par_acc);
@@ -168,10 +183,10 @@ void system_engine::read_particles() {
     }
     par_file.close();
     par_init_position.close();
-    if (!def_vel) {
+    if (def_vel) {
         par_init_velocity.close();
     }
-    if (!def_acc) {
+    if (def_acc) {
         par_init_acceleration.close();
     }
 }
@@ -182,9 +197,34 @@ void system_engine::test_read_particles() {
     }
 }
 
+void system_engine::read_external_load_field() {
+    ifstream el_file;
+    el_file.open("./inputs/input_external_load_field");
+    string el_line;
+    vector<external_load_point> el_points;
+    while (getline(el_file, el_line)) {
+        istringstream iss(el_line);
+        double pos;
+        double fx;
+        double fy;
+        double fz;
+        if (!(iss >> pos >> fx >> fy >> fz)) {
+            cout << "Error reading external load field file." << endl;
+        }
+        external_load_point el_point {};
+        el_point.set_position(pos);
+        Vector3d force;
+        force << fx, fy, fz;
+        el_point.set_force(force);
+        el_points.push_back(el_point);
+    }
+    el_field->set_forces(el_points);
+    el_file.close();
+}
+
 void system_engine::read_fluid_field() {
     ifstream ff_file;
-    ff_file.open("input_fluid_field");
+    ff_file.open("./inputs/input_fluid_field");
     string ff_line;
     fluid_field_builder * ff_builder = new fluid_field_builder();
     while (getline(ff_file, ff_line)) {
@@ -245,12 +285,22 @@ void system_engine::reset_beam_point_forces() {
 }
 
 void system_engine::update_beam_point_forces() {
-    for (beam * b1 : beams) {
-        for (beam * b2 : beams) {
-            if (b1 != b2) {
-                f_engine->point_load(b1, b2);
-            }
+    for (int i = 0; i < beams.size()-1; i++) {
+        for (int j = i+1; j < beams.size(); j++) {
+            f_engine->point_load(beams[i], beams[j]);
         }
+    }
+}
+
+void system_engine::update_beam_external_forces() {
+    for (beam * b : beams) {
+        f_engine->external_load(b, el_field);
+    }
+}
+
+void system_engine::update_beam_damping_forces() {
+    for (beam * b : beams) {
+        f_engine->damping_load(b);
     }
 }
 
@@ -293,21 +343,21 @@ void system_engine::write_to_file() {
         ofstream pos_file;
         pos_file.open(pos_name, ios_base::app);
         for (VectorXd pos : beam_pos_record[beam_id]) {
-            pos_file << pos << endl;
+            pos_file << pos.transpose() << endl;
         }
         pos_file.close();
         string vel_name("./outputs/" + to_string(beam_id) + "/velocity");
         ofstream vel_file;
         vel_file.open(vel_name, ios_base::app);
         for (VectorXd vel : beam_vel_record[beam_id]) {
-            vel_file << vel << endl;
+            vel_file << vel.transpose() << endl;
         }
         vel_file.close();
         string acc_name("./outputs/" + to_string(beam_id) + "/acceleration");
         ofstream acc_file;
         acc_file.open(acc_name, ios_base::app);
         for (VectorXd acc : beam_acc_record[beam_id]) {
-            acc_file << acc << endl;
+            acc_file << acc.transpose() << endl;
         }
         acc_file.close();
     }
@@ -317,6 +367,7 @@ void system_engine::write_to_file() {
 }
 
 void system_engine::check_output_folder() {
+
     if (!fs::exists("./outputs")) {
         // Create output folder
         fs::create_directories("./outputs");
@@ -337,4 +388,56 @@ void system_engine::check_output_folder() {
 
 int system_engine::check_write() {
     return beam_pos_record.size() >= 1000;
+}
+
+void system_engine::load_switches() {
+    ifstream switch_file;
+    switch_file.open("./inputs/input_switches");
+    string switch_line;
+    while (getline(switch_file, switch_line)) {
+        istringstream iss(switch_line);
+        string switch_name;
+        int switch_value;
+        if (!(iss >> switch_name >> switch_value)) {
+            cout << "Error reading switch file." << endl;
+        }
+        if (switch_name == "distributed") {
+            distributed_force_switch = switch_value;
+        } else if (switch_name == "point") {
+            point_force_switch = switch_value;
+        } else if (switch_name == "external") {
+            external_load_switch = switch_value;
+        } else if (switch_name == "damping") {
+            damping_force_switch = switch_value;
+        }
+    }
+    switch_file.close();
+}
+
+void system_engine::beam_dist_force_off() {
+    for (beam * b : beams) {
+        VectorXd q = VectorXd::Zero(b->get_ndof());
+        b->set_dist_force(q);
+    }
+}
+
+void system_engine::beam_point_force_off() {
+    for (beam * b : beams) {
+        VectorXd q = VectorXd::Zero(b->get_ndof());
+        b->set_point_force(q);
+    }
+}
+
+void system_engine::beam_external_force_off() {
+    for (beam * b : beams) {
+        VectorXd q = VectorXd::Zero(b->get_ndof());
+        b->set_external_force(q);
+    }
+}
+
+void system_engine::beam_damping_force_off() {
+    for (beam * b : beams) {
+        VectorXd q = VectorXd::Zero(b->get_ndof());
+        b->set_damping_force(q);
+    }
 }

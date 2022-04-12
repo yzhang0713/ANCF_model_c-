@@ -1,3 +1,6 @@
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 #include "force_engine.h"
 
 void force_engine::gravity_force(beam * b) {
@@ -194,23 +197,33 @@ void force_engine::distributed_load(beam * b, fluid_field * ff, double t) {
     double Cd = ff->get_Cd();
     double Cm = ff->get_Cm();
 
+//    cout << "gather information done" << endl;
+
     // Shape function matrix
     vector<Matrix<double, 3, 12>> S_mat, Sx_mat;
+//    cout << "S_mat size " << S_mat.size() << endl;
+//    cout << "Sx_mat size " << Sx_mat.size() << endl;
     for (int i = 0; i < np; i++) {
         double x = (1.0 + x5[i]) / 2.0;
         Vector4d S = Vector4d::Zero();
         utils::shape_fun(x*l_element, l_element, 0, S);
         Vector4d Sx = Vector4d::Zero();
         utils::shape_fun(x*l_element, l_element, 1, Sx);
-        S_mat[i] = MatrixXd::Zero(3,12);
-        Sx_mat[i] = MatrixXd::Zero(3, 12);
+//        cout << "shape fun done" << endl;
+        MatrixXd S_mat_local = MatrixXd::Zero(3, 12);
+        MatrixXd Sx_mat_local = MatrixXd::Zero(3, 12);
         for (int ii = 0; ii < 4; ii++) {
             for (int jj = 0; jj < 3; jj++) {
-                S_mat[i](jj, 3*(ii-1)+jj) = S(ii);
-                Sx_mat[i](jj, 3*(ii-1)+jj) = Sx(ii);
+                S_mat_local(jj, 3*ii+jj) = S(ii);
+                Sx_mat_local(jj, 3*ii+jj) = Sx(ii);
             }
         }
+//        cout << "shape matrix done" << endl;
+        S_mat.push_back(S_mat_local);
+        Sx_mat.push_back(Sx_mat_local);
     }
+
+//    cout << "shape function matrix done" << endl;
 
     // Initialize external force vector
     VectorXd Qd = VectorXd::Zero(b->get_ndof());
@@ -222,6 +235,7 @@ void force_engine::distributed_load(beam * b, fluid_field * ff, double t) {
     // Loop over all beam elements
     for (int ie = 0; ie < b->get_nelement(); ie++) {
         int istart = 6 * ie;
+//        cout << "istart: " << istart << endl;
         // Line force of element
         VectorXd Qd_ele = VectorXd::Zero(12);
         // Loop over all element points
@@ -230,13 +244,19 @@ void force_engine::distributed_load(beam * b, fluid_field * ff, double t) {
             Vector3d r_c = (S_mat[i])*(disp.segment(istart,12));
             Vector3d v_c = (S_mat[i])*(vel.segment(istart,12));
             Vector3d rx_c = (Sx_mat[i])*(disp.segment(istart,12));
+//            cout << "position and velocity vector" << endl;
             // Fluid velocity
             Vector3d v_f = ff->get_velocity(r_c, t);
             Vector3d a_f = ff->get_acceleration(r_c, t);
+//            cout << "fluid velocity and acceleration" << endl;
+//            cout << v_f << endl;
+//            cout << a_f << endl;
             // Relative velocity
             Vector3d v_rel = v_f - v_c;
             Vector3d v_reln = v_rel - v_rel.dot(rx_c) / rx_c.squaredNorm() * rx_c;
             Vector3d fl_c = 0.5 * rhof * Cd * width * v_reln.norm() * v_reln;
+//            cout << "relative velocity" << endl;
+//            cout << fl_c << endl;
             // Added mass
             Vector3d a_fn = a_f - a_f.dot(rx_c) / rx_c.squaredNorm() * rx_c;
             Vector3d f_am = rhof * Cm * M_PI * width * width / 4.0 * a_fn;
@@ -246,6 +266,7 @@ void force_engine::distributed_load(beam * b, fluid_field * ff, double t) {
             }
             // Compute line force of element using Gauss integration
             Qd_ele += (weight5[i] * (S_mat[i]).transpose() * f_tot);
+//            cout << "adding to element done" << endl;
         }
         // Rescale distributed force for each element
         Qd_ele *= (l_element / 2.0);
@@ -501,4 +522,31 @@ void force_engine::point_load_segment_level(beam * b1, int start_element_1, int 
     if (!obb_12.is_obb_disjoint(obb_22, gap)) {
         point_load_segment_level(b1, start_element_12, n_element_1-n_element_11, b2, start_element_22, n_element_2-n_element_21);
     }
+}
+
+void force_engine::external_load(beam * b, external_load_field * el_field) {
+    b->set_external_force(VectorXd::Zero(b->get_ndof()));
+    cout << "initialize external force done" << endl;
+    double l_element = b->get_length() / ((double) b->get_nelement());
+    for (external_load_point el_point : el_field->get_forces()) {
+        double pos = el_point.get_position();
+        Vector3d force = el_point.get_force();
+        int i_element = (int) (pos * b->get_nelement());
+        cout << "i element: " << i_element << endl;
+        if (i_element == b->get_nelement()) {
+            // Meaning force at tip of beam
+            Matrix<double, 3, 12> S_mat = utils::get_shape_matrix(l_element, l_element, 0);
+            cout << "shape matrix " << S_mat << endl;
+            b->get_external_force().tail(12) += ((S_mat.transpose())*force);
+            cout << "assign force done" << endl;
+        } else {
+            // Internal points
+            Matrix<double, 3, 12> S_mat = utils::get_shape_matrix((pos*b->get_nelement()-i_element)*l_element, l_element, 0);
+            b->get_external_force().segment(6*i_element,12) += ((S_mat.transpose())*force);
+        }
+    }
+}
+
+void force_engine::damping_load(beam * b) {
+    b->set_damping_force(-0.10 * b->get_velocity());
 }

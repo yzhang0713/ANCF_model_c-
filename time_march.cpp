@@ -5,13 +5,19 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     // Computer the status at 'xi_1' step
     VectorXd pos_xi_1 = h * b->get_velocity();
     VectorXd vel_xi_1 = h * b->get_acceleration();
+    VectorXd q_zero = VectorXd::Zero(b->get_ndof());
     beam b_xi_1(*b);
     b_xi_1.update_position(b->get_position() + 0.5*pos_xi_1);
     b_xi_1.update_velocity(b->get_velocity() + 0.5*vel_xi_1);
     b_xi_1.set_gravity_force(b->get_gravity_force());
     b_xi_1.set_point_force(b->get_point_force());
+    b_xi_1.set_external_force(b->get_external_force());
     s_engine->get_force_engine()->elastic_force(&b_xi_1);
-    s_engine->get_force_engine()->distributed_load(&b_xi_1, s_engine->get_fluid_field(), t+0.5*h);
+    if (s_engine->get_distributed_force_switch()) {
+        s_engine->get_force_engine()->distributed_load(&b_xi_1, s_engine->get_fluid_field(), t+0.5*h);
+    } else {
+        b_xi_1.set_dist_force(q_zero);
+    }
     b_xi_1.set_total_force();
     s_engine->get_force_engine()->add_constraint_load(&b_xi_1);
     VectorXd acc_xi_1 = s_engine->solving_linear_system_of_beam(&b_xi_1);
@@ -24,8 +30,13 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     b_xi_2.update_velocity(b->get_velocity() + 0.5*vel_xi_2);
     b_xi_2.set_gravity_force(b->get_gravity_force());
     b_xi_2.set_point_force(b->get_point_force());
+    b_xi_2.set_external_force(b->get_external_force());
     s_engine->get_force_engine()->elastic_force(&b_xi_2);
-    s_engine->get_force_engine()->distributed_load(&b_xi_2, s_engine->get_fluid_field(), t+0.5*h);
+    if (s_engine->get_distributed_force_switch()) {
+        s_engine->get_force_engine()->distributed_load(&b_xi_2, s_engine->get_fluid_field(), t+0.5*h);
+    } else {
+        b_xi_2.set_dist_force(q_zero);
+    }
     b_xi_2.set_total_force();
     s_engine->get_force_engine()->add_constraint_load(&b_xi_2);
     VectorXd acc_xi_2 = s_engine->solving_linear_system_of_beam(&b_xi_2);
@@ -38,8 +49,13 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     b_xi_3.update_velocity(b->get_velocity() + vel_xi_3);
     b_xi_3.set_gravity_force(b->get_gravity_force());
     b_xi_3.set_point_force(b->get_point_force());
+    b_xi_3.set_external_force(b->get_external_force());
     s_engine->get_force_engine()->elastic_force(&b_xi_3);
-    s_engine->get_force_engine()->distributed_load(&b_xi_3, s_engine->get_fluid_field(), t+h);
+    if (s_engine->get_distributed_force_switch()) {
+        s_engine->get_force_engine()->distributed_load(&b_xi_3, s_engine->get_fluid_field(), t+h);
+    } else {
+        b_xi_3.set_dist_force(q_zero);
+    }
     b_xi_3.set_total_force();
     s_engine->get_force_engine()->add_constraint_load(&b_xi_3);
     VectorXd acc_xi_3 = s_engine->solving_linear_system_of_beam(&b_xi_3);
@@ -54,7 +70,9 @@ void time_march::range_kutta(beam * b, double t, double h, system_engine * s_eng
     b->update_position(pos);
     b->update_velocity(vel);
     s_engine->get_force_engine()->elastic_force(b);
-    s_engine->get_force_engine()->distributed_load(b, s_engine->get_fluid_field(), t+h);
+    if (s_engine->get_distributed_force_switch()) {
+        s_engine->get_force_engine()->distributed_load(b, s_engine->get_fluid_field(), t+h);
+    }
     b->set_total_force();
     s_engine->get_force_engine()->add_constraint_load(b);
     VectorXd acc = s_engine->solving_linear_system_of_beam(b);
