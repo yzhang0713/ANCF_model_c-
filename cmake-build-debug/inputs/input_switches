@@ -1,5 +1,5 @@
 distributed 0
 point 0
 external 1
-damping 1
-gravity 0
+damping 0
+gravity 1

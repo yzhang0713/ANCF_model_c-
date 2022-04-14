@@ -209,7 +209,7 @@ Matrix<double, 3, 12> utils::get_shape_matrix(Vector4d & S) {
 Matrix<double, 3, 12> utils::get_shape_matrix(double x, double L, int der) {
     Vector4d S;
     utils::shape_fun(x, L, der, S);
-    cout << "shape vector S:" << S.transpose() << endl;
+//    cout << "shape vector S:" << S.transpose() << endl;
     Matrix<double, 3, 12> S_mat;
     S_mat.setZero();
     for (int ii = 0; ii < 4; ii++) {

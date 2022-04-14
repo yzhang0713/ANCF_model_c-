@@ -73,6 +73,8 @@ void system_engine::read_beams() {
             pos(i) = cur_pos;
         }
         b_builder->set_position(pos);
+        if (debug)
+            cout << "set position done" << endl;
         if (!def_vel) {
             b_builder->set_velocity();
         } else {
@@ -86,6 +88,8 @@ void system_engine::read_beams() {
             }
             b_builder->set_velocity(vel);
         }
+        if (debug)
+            cout << "set velocity done" << endl;
         if (!def_acc) {
             b_builder->set_acceleration();
         } else {
@@ -99,6 +103,8 @@ void system_engine::read_beams() {
             }
             b_builder->set_acceleration(acc);
         }
+        if (debug)
+            cout << "set acceleration done" << endl;
         beam * b = b_builder->get_beam();
         beams.push_back(b);
     }
@@ -347,9 +353,24 @@ VectorXd system_engine::solving_linear_system_of_beam(beam * b) {
 
 void system_engine::store_beam_information() {
     for (beam * b : beams) {
+//        cout << "record size before store: " << beam_pos_record.size() << endl;
         beam_pos_record[b->get_beam_id()].push_back(b->get_position());
         beam_vel_record[b->get_beam_id()].push_back(b->get_velocity());
         beam_acc_record[b->get_beam_id()].push_back(b->get_acceleration());
+        VectorXd qe(b->get_elastic_force());
+        beam_elastic_record[b->get_beam_id()].push_back(qe);
+        VectorXd qg(b->get_gravity_force());
+        beam_gravity_record[b->get_beam_id()].push_back(qg);
+        VectorXd qd(b->get_damping_force());
+        beam_damping_record[b->get_beam_id()].push_back(qd);
+        VectorXd qex(b->get_external_force());
+        beam_external_record[b->get_beam_id()].push_back(qex);
+        VectorXd qdist(b->get_dist_force());
+        beam_distribute_record[b->get_beam_id()].push_back(qdist);
+        VectorXd qp(b->get_point_force());
+        beam_point_record[b->get_beam_id()].push_back(qp);
+        time_record.push_back(t);
+//        cout << "record size after store: " << beam_pos_record.size() << endl;
     }
 }
 
@@ -360,6 +381,7 @@ void system_engine::update_beams() {
 }
 
 void system_engine::write_to_file() {
+//    cout << "write to file" << endl;
     check_output_folder();
     // Write outputs to each beam
     for (auto const& x : beam_pos_record) {
@@ -367,28 +389,77 @@ void system_engine::write_to_file() {
         string pos_name("./outputs/" + to_string(beam_id) + "/position");
         ofstream pos_file;
         pos_file.open(pos_name, ios_base::app);
-        for (VectorXd pos : beam_pos_record[beam_id]) {
-            pos_file << pos.transpose() << endl;
+        for (int i = 0; i < time_record.size(); i++) {
+            pos_file << time_record[i] << " " << beam_pos_record[beam_id][i].transpose() << endl;
         }
         pos_file.close();
         string vel_name("./outputs/" + to_string(beam_id) + "/velocity");
         ofstream vel_file;
         vel_file.open(vel_name, ios_base::app);
-        for (VectorXd vel : beam_vel_record[beam_id]) {
-            vel_file << vel.transpose() << endl;
+        for (int i = 0; i < time_record.size(); i++) {
+            vel_file << time_record[i] << " " << beam_vel_record[beam_id][i].transpose() << endl;
         }
         vel_file.close();
         string acc_name("./outputs/" + to_string(beam_id) + "/acceleration");
         ofstream acc_file;
         acc_file.open(acc_name, ios_base::app);
-        for (VectorXd acc : beam_acc_record[beam_id]) {
-            acc_file << acc.transpose() << endl;
+        for (int i = 0; i < time_record.size(); i++) {
+            acc_file << time_record[i] << " " << beam_acc_record[beam_id][i].transpose() << endl;
         }
         acc_file.close();
+        string elastic_name("./outputs/" + to_string(beam_id) + "/elastic");
+        ofstream elastic_file;
+        elastic_file.open(elastic_name, ios_base::app);
+        for (int i = 0; i < time_record.size(); i++) {
+            elastic_file << time_record[i] << " " << beam_elastic_record[beam_id][i].transpose() << endl;
+        }
+        elastic_file.close();
+        string gravity_name("./outputs/" + to_string(beam_id) + "/gravity");
+        ofstream gravity_file;
+        gravity_file.open(gravity_name, ios_base::app);
+        for (int i = 0; i < time_record.size(); i++) {
+            gravity_file << time_record[i] << " " << beam_gravity_record[beam_id][i].transpose() << endl;
+        }
+        gravity_file.close();
+        string damping_name("./outputs/" + to_string(beam_id) + "/damping");
+        ofstream damping_file;
+        damping_file.open(damping_name, ios_base::app);
+        for (int i = 0; i < time_record.size(); i++) {
+            damping_file << time_record[i] << " " << beam_damping_record[beam_id][i].transpose() << endl;
+        }
+        damping_file.close();
+        string external_name("./outputs/" + to_string(beam_id) + "/external");
+        ofstream external_file;
+        external_file.open(external_name, ios_base::app);
+        for (int i = 0; i < time_record.size(); i++) {
+            external_file << time_record[i] << " " << beam_external_record[beam_id][i].transpose() << endl;
+        }
+        external_file.close();
+        string distribution_name("./outputs/" + to_string(beam_id) + "/distribution");
+        ofstream distribution_file;
+        distribution_file.open(distribution_name, ios_base::app);
+        for (int i = 0; i < time_record.size(); i++) {
+            distribution_file << time_record[i] << " " << beam_distribute_record[beam_id][i].transpose() << endl;
+        }
+        distribution_file.close();
+        string point_name("./outputs/" + to_string(beam_id) + "/point");
+        ofstream point_file;
+        point_file.open(point_name, ios_base::app);
+        for (int i = 0; i < time_record.size(); i++) {
+            point_file << time_record[i] << " " << beam_point_record[beam_id][i].transpose() << endl;
+        }
+        point_file.close();
     }
     beam_pos_record.clear();
     beam_vel_record.clear();
     beam_acc_record.clear();
+    beam_elastic_record.clear();
+    beam_gravity_record.clear();
+    beam_external_record.clear();
+    beam_damping_record.clear();
+    beam_distribute_record.clear();
+    beam_point_record.clear();
+    time_record.clear();
 }
 
 void system_engine::check_output_folder() {
@@ -396,9 +467,10 @@ void system_engine::check_output_folder() {
     if (!fs::exists("./outputs")) {
         // Create output folder
         fs::create_directories("./outputs");
-        for (auto const& x : beam_pos_record) {
-            int beam_id = x.first;
-            // Create folder for each beam
+    }
+    for (auto const& x : beam_pos_record) {
+        int beam_id = x.first;
+        if (!fs::exists("./outputs/" + to_string(beam_id))) {
             fs::create_directories("./outputs/" + to_string(beam_id));
             // Create file for beam position, velocity, and acceleration
             ofstream pos_file("./outputs/" + to_string(beam_id) + "/position");
@@ -407,12 +479,24 @@ void system_engine::check_output_folder() {
             vel_file.close();
             ofstream acc_file("./outputs/" + to_string(beam_id) + "/acceleration");
             acc_file.close();
+            ofstream elastic_file("./outputs/" + to_string(beam_id) + "/elastic");
+            elastic_file.close();
+            ofstream gravity_file("./outputs/" + to_string(beam_id) + "/gravity");
+            gravity_file.close();
+            ofstream damping_file("./outputs/" + to_string(beam_id) + "/damping");
+            damping_file.close();
+            ofstream external_file("./outputs/" + to_string(beam_id) + "/external");
+            external_file.close();
+            ofstream distribution_file("./outputs/" + to_string(beam_id) + "/distribution");
+            distribution_file.close();
+            ofstream point_file("./outputs/" + to_string(beam_id) + "/point");
+            point_file.close();
         }
     }
 }
 
 int system_engine::check_write() {
-    return beam_pos_record.size() >= 1000;
+    return time_record.size() >= 100;
 }
 
 void system_engine::load_switches() {
@@ -434,6 +518,8 @@ void system_engine::load_switches() {
             external_load_switch = switch_value;
         } else if (switch_name == "damping") {
             damping_force_switch = switch_value;
+        } else if (switch_name == "gravity") {
+            gravity_force_switch = switch_value;
         }
     }
     switch_file.close();
@@ -471,5 +557,12 @@ void system_engine::beam_gravity_force_off() {
     for (beam * b : beams) {
         VectorXd q = VectorXd::Zero(b->get_ndof());
         b->set_gravity_force(q);
+    }
+}
+
+void system_engine::remove_outputs() {
+    if (!fs::exists("./outputs")) {
+        // Remove output folder
+        fs::remove_all("./outputs");
     }
 }

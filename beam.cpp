@@ -43,11 +43,14 @@ void beam::set_mass_matrix() {
     double l_element = length / nelement;
     double factor = rho * area * l_element;
     Matrix<double, 12, 12> mass_element = utils::element_mass_matrix(l_element, factor);
-//    cout << "mass element done" << endl;
+    if (debug)
+        cout << "mass element done" << endl;
     // Assemble to get the global mass matrix of the beam
     mass_matrix = MatrixXd::Zero(ndof, ndof);
-//    cout << "ndof " << ndof << endl;
-//    cout << "nelement " << nelement << endl;
+    if (debug) {
+        cout << "ndof " << ndof << endl;
+        cout << "nelement " << nelement << endl;
+    }
     mass_matrix.setZero();
     for (int i = 0; i < nelement; i++) {
         mass_matrix.block(6*i,6*i,6,6) += mass_element.topLeftCorner(6,6);
@@ -55,6 +58,8 @@ void beam::set_mass_matrix() {
         mass_matrix.block(6*i,6*(i+1),6,6) = mass_element.topRightCorner(6,6);
         mass_matrix.block(6*(i+1),6*(i+1),6,6) += mass_element.bottomRightCorner(6,6);
     }
+    if (debug)
+        cout << "set mass matrix done" << endl;
     // Adjust mass matrix according to constraint
     if (botCnstr != 0) {
         mass_matrix.topRows(3*botCnstr).setZero();
@@ -65,10 +70,11 @@ void beam::set_mass_matrix() {
     if (topCnstr != 0) {
         mass_matrix.bottomRows(3*topCnstr).setZero();
         for (int i = 0; i < 3*topCnstr; i++) {
-            mass_matrix(ndof-i,ndof-i) = 1.0;
+            mass_matrix(ndof-1-i,ndof-1-i) = 1.0;
         }
     }
-//    cout << "mass matrix done" << endl;
+    if (debug)
+        cout << "mass matrix done" << endl;
 }
 
 void beam::set_mass_LU() {
@@ -89,6 +95,8 @@ ostream& operator<<(ostream& os, const beam& b) {
     os << "    thick - " << b.thick << endl;
     os << "    width - " << b.width << endl;
     os << "    element - " << b.nelement << endl;
+    os << "    area - " << b.area << endl;
+    os << "    inertia - " << b.inertia << endl;
     return os;
 }
 

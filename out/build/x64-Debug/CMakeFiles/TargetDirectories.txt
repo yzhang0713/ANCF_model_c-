@@ -1,3 +1,0 @@
-C:/YuZhang/GitRepo/ANCF_model_cpp/out/build/x64-Debug/CMakeFiles/ANCF_model_c__.dir
-C:/YuZhang/GitRepo/ANCF_model_cpp/out/build/x64-Debug/CMakeFiles/edit_cache.dir
-C:/YuZhang/GitRepo/ANCF_model_cpp/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

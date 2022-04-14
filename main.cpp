@@ -35,6 +35,9 @@ int main() {
     // Initialize system engine
     system_engine s{};
 
+    // Remove output directory
+    s.remove_outputs();
+
     // Read beams and particles from files
     s.read_beams();
     if (debug)
@@ -115,11 +118,15 @@ int main() {
 
     // Start time marching
     s.initialize_time();
-    s.set_time_step(0.001);
-    double t_end = 100.0;
+    s.set_time_step(0.0001);
+    double t_end = 50.0;
+    int update_count = 0;
     while (s.get_cur_time() < t_end) {
         // Store current beam information
-        s.store_beam_information();
+        if (update_count == 100) {
+            s.store_beam_information();
+            update_count = 0;
+        }
         // Moving beam to next position
         s.update_beams();
         // Update time
@@ -129,6 +136,9 @@ int main() {
         if (s.get_point_force_switch()) {
             s.update_beam_point_forces();
         }
+        if (s.get_external_force_switch()) {
+            s.update_beam_external_forces();
+        }
         if (s.get_damping_force_switch()) {
             s.update_beam_damping_forces();
         }
@@ -137,6 +147,7 @@ int main() {
         }
         if (show_time)
             cout << "current time " << s.get_cur_time() << endl;
+        update_count++;
     }
     s.write_to_file();
 

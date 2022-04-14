@@ -32,6 +32,13 @@ private:
     map<int, vector<VectorXd>> beam_pos_record;
     map<int, vector<VectorXd>> beam_vel_record;
     map<int, vector<VectorXd>> beam_acc_record;
+    map<int, vector<VectorXd>> beam_elastic_record;
+    map<int, vector<VectorXd>> beam_gravity_record;
+    map<int, vector<VectorXd>> beam_damping_record;
+    map<int, vector<VectorXd>> beam_external_record;
+    map<int, vector<VectorXd>> beam_distribute_record;
+    map<int, vector<VectorXd>> beam_point_record;
+    vector<double> time_record;
     int distributed_force_switch;
     int point_force_switch;
     int external_load_switch;
@@ -84,6 +91,7 @@ public:
     int get_external_force_switch() {return external_load_switch;};
     int get_damping_force_switch() {return damping_force_switch;};
     int get_gravity_force_switch() {return gravity_force_switch;};
+    void remove_outputs();
 };
 
 

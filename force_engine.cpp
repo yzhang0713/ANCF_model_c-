@@ -147,27 +147,31 @@ Vector<double, 12> force_engine::axial_force_integrand(Vector<double, 12> disp, 
 
 Vector<double, 12> force_engine::flexural_force_integrand(Vector<double, 12> disp, double x, double lelement) {
     // First and second derivative of shape function with respect to x
-    Vector<double, 4> Sx, Sxx;
-    utils::shape_fun(x, lelement, 1, Sx);
-    utils::shape_fun(x, lelement, 2, Sxx);
+//    Vector<double, 4> Sx, Sxx;
+//    utils::shape_fun(x, lelement, 1, Sx);
+//    utils::shape_fun(x, lelement, 2, Sxx);
 
     // Shape function matrix
     Matrix<double, 3, 12> Sx_mat, Sxx_mat;
-    Sx_mat = MatrixXd::Zero(3, 12);
-    Sxx_mat = MatrixXd::Zero(3, 12);
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 3; j++) {
-            Sx_mat(j, 3*i+j) = Sx(i);
-            Sxx_mat(j, 3*i+j) = Sxx(i);
-        }
-    }
+    Sx_mat = utils::get_shape_matrix(x, lelement, 1);
+    Sxx_mat = utils::get_shape_matrix(x, lelement, 2);
+//    Sx_mat = MatrixXd::Zero(3, 12);
+//    Sxx_mat = MatrixXd::Zero(3, 12);
+//    for (int i = 0; i < 4; i++) {
+//        for (int j = 0; j < 3; j++) {
+//            Sx_mat(j, 3*i+j) = Sx(i);
+//            Sxx_mat(j, 3*i+j) = Sxx(i);
+//        }
+//    }
 
     // First and second derivative of position vector r with respect to x
-    Matrix<double, 3, 4> disp_rs;
-    disp_rs = disp.reshaped(3, 4);
+//    Matrix<double, 3, 4> disp_rs;
+//    disp_rs = disp.reshaped(3, 4);
     Vector3d rx, rxx;
-    rx = disp_rs * Sx;
-    rxx = disp_rs * Sxx;
+    rx = Sx_mat*disp;
+    rxx = Sxx_mat*disp;
+//    rx = disp_rs * Sx;
+//    rxx = disp_rs * Sxx;
     double rx_mag2 = rx.dot(rx);
 
     // Calculate v = rx x rxx
@@ -554,20 +558,26 @@ void force_engine::point_load_segment_level(beam * b1, int start_element_1, int 
 
 void force_engine::external_load(beam * b, external_load_field * el_field) {
     b->set_external_force(VectorXd::Zero(b->get_ndof()));
-    cout << "initialize external force done" << endl;
+    if (debug)
+        cout << "initialize external force done" << endl;
     double l_element = b->get_length() / ((double) b->get_nelement());
     for (external_load_point el_point : el_field->get_forces()) {
         double pos = el_point.get_position();
         Vector3d force = el_point.get_force();
         int i_element = (int) (pos * b->get_nelement());
-        cout << "i element: " << i_element << endl;
+        if (debug)
+            cout << "i element: " << i_element << endl;
         if (i_element == b->get_nelement()) {
             // Meaning force at tip of beam
             Matrix<double, 3, 12> S_mat = utils::get_shape_matrix(l_element, l_element, 0);
-            cout << "shape matrix " << S_mat << endl;
-            cout << "force " << force.transpose() << endl;
+            if (debug) {
+                cout << "shape matrix " << S_mat << endl;
+                cout << "force " << force.transpose() << endl;
+            }
             b->get_external_force().tail(12) += ((S_mat.transpose())*force);
-            cout << "assign force done" << endl;
+            if (debug) {
+                cout << "assign force done" << endl;
+            }
         } else {
             // Internal points
             Matrix<double, 3, 12> S_mat = utils::get_shape_matrix((pos*b->get_nelement()-i_element)*l_element, l_element, 0);
@@ -577,5 +587,5 @@ void force_engine::external_load(beam * b, external_load_field * el_field) {
 }
 
 void force_engine::damping_load(beam * b) {
-    b->set_damping_force(-0.02 * b->get_velocity());
+    b->set_damping_force(-0.2 * b->get_velocity());
 }

@@ -30,6 +30,7 @@ private:
     MatrixXd mass_matrix;   // Mass matrix of beam
     FullPivLU<MatrixXd> mass_LU; // LU decomposition of mass matrix
     friend class beam_builder;
+    int debug = 0;
 public:
     static int counter;
     beam() = default;
