@@ -15,7 +15,7 @@ using namespace std;
 
 class force_engine {
 private:
-    Vector3d gravity{0.0, 0.0, 9.8};
+    Vector3d gravity{0.0, 0, -9.8};
     Vector<double, 12> axial_force_integrand(Vector<double, 12>, double, double);
     Vector<double, 12> flexural_force_integrand(Vector<double, 12>, double, double);
     int debug = 0;

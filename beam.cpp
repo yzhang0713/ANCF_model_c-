@@ -2,6 +2,10 @@
 
 int beam::counter = 1;
 
+beam::~beam() {
+    delete forces;
+}
+
 beam::beam(const beam & b) {
     E = b.E;
     nu = b.nu;
@@ -32,6 +36,7 @@ void beam::set_area() {
 
 void beam::set_inertia() {
     inertia = width * thick * thick * thick / 12.0;
+//    inertia = 4.9732540466184477e-011;
 }
 
 void beam::set_ndof() {

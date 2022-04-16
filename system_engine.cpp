@@ -6,7 +6,25 @@ namespace fs = filesystem;
 system_engine::system_engine() {
     f_engine = new force_engine();
     el_field = new external_load_field();
+    b_builder = new beam_builder();
+    p_builder = new particle_builder();
+    ff_builder = new fluid_field_builder();
     t = 0.0;
+}
+
+system_engine::~system_engine() {
+    delete f_engine;
+    delete el_field;
+    delete b_builder;
+    delete p_builder;
+    delete ff_builder;
+    for (beam * b : beams) {
+        delete b;
+    }
+    for (particle * p : particles) {
+        delete p;
+    }
+    delete f_field;
 }
 
 void system_engine::initialize_time() {
@@ -53,7 +71,6 @@ void system_engine::read_beams() {
             cout << "Error reading beam file." << endl;
             break;
         }
-        beam_builder * b_builder = new beam_builder();
         b_builder->set_E(E);
         b_builder->set_nu(nu);
         b_builder->set_rho(rho);
@@ -155,7 +172,6 @@ void system_engine::read_particles() {
             cout << "Error reading particle file." << endl;
             break;
         }
-        particle_builder * p_builder = new particle_builder();
         p_builder->set_E(E);
         p_builder->set_rho(rho);
         p_builder->set_r(r);
@@ -236,7 +252,6 @@ void system_engine::read_fluid_field() {
     ifstream ff_file;
     ff_file.open("./inputs/input_fluid_field");
     string ff_line;
-    fluid_field_builder * ff_builder = new fluid_field_builder();
     while (getline(ff_file, ff_line)) {
         istringstream iss(ff_line);
         string field_name;
@@ -309,6 +324,8 @@ void system_engine::reset_beam_point_forces() {
 void system_engine::update_beam_point_forces() {
     for (int i = 0; i < beams.size()-1; i++) {
         for (int j = i+1; j < beams.size(); j++) {
+            if (debug)
+                cout << "point force between beam " << i << " and bean " << j << endl;
             f_engine->point_load(beams[i], beams[j]);
         }
     }
@@ -316,7 +333,12 @@ void system_engine::update_beam_point_forces() {
 
 void system_engine::update_beam_external_forces() {
     for (beam * b : beams) {
-        f_engine->external_load(b, el_field);
+        if (b->get_beam_id() == 1) {
+            f_engine->external_load(b, el_field);
+        } else {
+            b->set_external_force(VectorXd::Zero(b->get_ndof()));
+        }
+
         if (debug) {
             cout << "external force" << b->get_external_force().transpose() << endl;
         }
@@ -353,7 +375,6 @@ VectorXd system_engine::solving_linear_system_of_beam(beam * b) {
 
 void system_engine::store_beam_information() {
     for (beam * b : beams) {
-//        cout << "record size before store: " << beam_pos_record.size() << endl;
         beam_pos_record[b->get_beam_id()].push_back(b->get_position());
         beam_vel_record[b->get_beam_id()].push_back(b->get_velocity());
         beam_acc_record[b->get_beam_id()].push_back(b->get_acceleration());
@@ -369,9 +390,8 @@ void system_engine::store_beam_information() {
         beam_distribute_record[b->get_beam_id()].push_back(qdist);
         VectorXd qp(b->get_point_force());
         beam_point_record[b->get_beam_id()].push_back(qp);
-        time_record.push_back(t);
-//        cout << "record size after store: " << beam_pos_record.size() << endl;
     }
+    time_record.push_back(t);
 }
 
 void system_engine::update_beams() {
@@ -381,11 +401,18 @@ void system_engine::update_beams() {
 }
 
 void system_engine::write_to_file() {
-//    cout << "write to file" << endl;
+    if (debug) {
+        cout << "write to file" << endl;
+        cout << "record capacity " << beam_pos_record.size() << endl;
+    }
+
+
     check_output_folder();
     // Write outputs to each beam
     for (auto const& x : beam_pos_record) {
         int beam_id = x.first;
+        if (debug)
+            cout << "start writing to beam " << beam_id << endl;
         string pos_name("./outputs/" + to_string(beam_id) + "/position");
         ofstream pos_file;
         pos_file.open(pos_name, ios_base::app);
@@ -393,6 +420,8 @@ void system_engine::write_to_file() {
             pos_file << time_record[i] << " " << beam_pos_record[beam_id][i].transpose() << endl;
         }
         pos_file.close();
+        if (debug)
+            cout << "write position done" << endl;
         string vel_name("./outputs/" + to_string(beam_id) + "/velocity");
         ofstream vel_file;
         vel_file.open(vel_name, ios_base::app);
@@ -400,6 +429,8 @@ void system_engine::write_to_file() {
             vel_file << time_record[i] << " " << beam_vel_record[beam_id][i].transpose() << endl;
         }
         vel_file.close();
+        if (debug)
+            cout << "write velocity done" << endl;
         string acc_name("./outputs/" + to_string(beam_id) + "/acceleration");
         ofstream acc_file;
         acc_file.open(acc_name, ios_base::app);
@@ -407,6 +438,8 @@ void system_engine::write_to_file() {
             acc_file << time_record[i] << " " << beam_acc_record[beam_id][i].transpose() << endl;
         }
         acc_file.close();
+        if (debug)
+            cout << "write acceleration done" << endl;
         string elastic_name("./outputs/" + to_string(beam_id) + "/elastic");
         ofstream elastic_file;
         elastic_file.open(elastic_name, ios_base::app);
@@ -414,6 +447,8 @@ void system_engine::write_to_file() {
             elastic_file << time_record[i] << " " << beam_elastic_record[beam_id][i].transpose() << endl;
         }
         elastic_file.close();
+        if (debug)
+            cout << "write elastic done" << endl;
         string gravity_name("./outputs/" + to_string(beam_id) + "/gravity");
         ofstream gravity_file;
         gravity_file.open(gravity_name, ios_base::app);
@@ -421,6 +456,8 @@ void system_engine::write_to_file() {
             gravity_file << time_record[i] << " " << beam_gravity_record[beam_id][i].transpose() << endl;
         }
         gravity_file.close();
+        if (debug)
+            cout << "write gravity done" << endl;
         string damping_name("./outputs/" + to_string(beam_id) + "/damping");
         ofstream damping_file;
         damping_file.open(damping_name, ios_base::app);
@@ -428,6 +465,8 @@ void system_engine::write_to_file() {
             damping_file << time_record[i] << " " << beam_damping_record[beam_id][i].transpose() << endl;
         }
         damping_file.close();
+        if (debug)
+            cout << "write damping done" << endl;
         string external_name("./outputs/" + to_string(beam_id) + "/external");
         ofstream external_file;
         external_file.open(external_name, ios_base::app);
@@ -435,6 +474,8 @@ void system_engine::write_to_file() {
             external_file << time_record[i] << " " << beam_external_record[beam_id][i].transpose() << endl;
         }
         external_file.close();
+        if (debug)
+            cout << "write external done" << endl;
         string distribution_name("./outputs/" + to_string(beam_id) + "/distribution");
         ofstream distribution_file;
         distribution_file.open(distribution_name, ios_base::app);
@@ -442,6 +483,8 @@ void system_engine::write_to_file() {
             distribution_file << time_record[i] << " " << beam_distribute_record[beam_id][i].transpose() << endl;
         }
         distribution_file.close();
+        if (debug)
+            cout << "write distribute done" << endl;
         string point_name("./outputs/" + to_string(beam_id) + "/point");
         ofstream point_file;
         point_file.open(point_name, ios_base::app);
@@ -449,6 +492,8 @@ void system_engine::write_to_file() {
             point_file << time_record[i] << " " << beam_point_record[beam_id][i].transpose() << endl;
         }
         point_file.close();
+        if (debug)
+            cout << "write point done" << endl;
     }
     beam_pos_record.clear();
     beam_vel_record.clear();
@@ -496,7 +541,7 @@ void system_engine::check_output_folder() {
 }
 
 int system_engine::check_write() {
-    return time_record.size() >= 100;
+    return time_record.size() >= 1000;
 }
 
 void system_engine::load_switches() {

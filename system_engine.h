@@ -27,6 +27,9 @@ private:
     force_engine* f_engine;
     fluid_field* f_field;
     external_load_field* el_field;
+    beam_builder * b_builder;
+    particle_builder * p_builder;
+    fluid_field_builder * ff_builder;
     double t;
     double h;
     map<int, vector<VectorXd>> beam_pos_record;
@@ -47,7 +50,7 @@ private:
     int debug = 0;
 public:
     system_engine();
-    ~system_engine() = default;
+    ~system_engine();
     force_engine * get_force_engine() {return f_engine;};
     fluid_field * get_fluid_field() {return f_field;};
     void initialize_time();

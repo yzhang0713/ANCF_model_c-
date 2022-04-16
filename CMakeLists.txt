@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.16)
 project(ANCF_model_c__)
 
 set(CMAKE_CXX_STANDARD 17)
 set(EIGEN_DIR "C:\\eigen-3.4.0")
+#set(EIGEN_DIR "/mnt/c/eigen-3.4.0")
 include_directories (${EIGEN_DIR})
 
 

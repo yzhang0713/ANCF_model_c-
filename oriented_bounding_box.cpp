@@ -1,14 +1,29 @@
 #include "oriented_bounding_box.h"
+#include <iostream>
+
+oriented_bounding_box::oriented_bounding_box() {
+    for (int i = 0; i < 3; i++) {
+        normal_dir.push_back(Vector3d::Zero());
+        range_dir.push_back(Vector2d::Zero());
+    }
+}
 
 void oriented_bounding_box::set_obb_info(vector<Vector3d> points) {
+    int debug = 0;
     // Number of points
     double n_point = (double) points.size();
+    if (debug)
+        cout << "Number of points: " << n_point << endl;
     // Mean position
     mean_point.setZero();
     for (Vector3d point : points) {
+        if (debug)
+            cout << "Current point: " << point.transpose() << endl;
         mean_point += point;
     }
     mean_point /= n_point;
+    if (debug)
+        cout << "Mean point: " << mean_point.transpose() << endl;
     // Normal directions
     double cov_11 = 0.0;
     double cov_33 = 0.0;
@@ -23,12 +38,16 @@ void oriented_bounding_box::set_obb_info(vector<Vector3d> points) {
     cov_11 /= n_point;
     cov_13 /= n_point;
     cov_33 /= n_point;
+    if (debug)
+        cout << "Covariance done: " << cov_11 << ", " << cov_33 << ", " << cov_13 << endl;
     double factor = sqrt((cov_33-cov_11)*(cov_33-cov_11)+4.0*cov_13*cov_13);
     double factor_1 = ((cov_33-cov_11) + factor) / 2.0;
     double factor_2 = factor_1 - factor;
     double factor_3 = sqrt(factor_1 * factor_1 + cov_13 * cov_13);
     double factor_4 = sqrt(factor_2 * factor_2 + cov_13 * cov_13);
-    if (cov_13 <= 1.0e-5) {
+    if (abs(cov_13) <= 1.0e-5) {
+        if (debug)
+            cout << "case 1" << endl;
         normal_dir[0] << 1.0, 0.0, 0.0;
         normal_dir[2] << 0.0, 0.0, 1.0;
     } else {
@@ -36,6 +55,10 @@ void oriented_bounding_box::set_obb_info(vector<Vector3d> points) {
         normal_dir[2] << cov_13/factor_4, 0.0, factor_2/factor_4;
     }
     normal_dir[1].setZero();
+    if (debug) {
+        cout << "normal direction 1: " << normal_dir[0].transpose() << endl;
+        cout << "normal direction 1: " << normal_dir[1].transpose() << endl;
+    }
     // Range of box over normal directions
     range_dir[0].setZero();
     range_dir[1].setZero();

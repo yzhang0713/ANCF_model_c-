@@ -118,15 +118,16 @@ int main() {
 
     // Start time marching
     s.initialize_time();
-    s.set_time_step(0.0001);
-    double t_end = 50.0;
+    s.set_time_step(0.00001);
+    double t_end = 20.0;
     int update_count = 0;
     while (s.get_cur_time() < t_end) {
         // Store current beam information
-        if (update_count == 100) {
-            s.store_beam_information();
-            update_count = 0;
-        }
+        s.store_beam_information();
+//        if (update_count == 1) {
+//            s.store_beam_information();
+//            update_count = 0;
+//        }
         // Moving beam to next position
         s.update_beams();
         // Update time
@@ -143,11 +144,13 @@ int main() {
             s.update_beam_damping_forces();
         }
         if (s.check_write()) {
+            if (debug)
+                cout << "write to file at time " << s.get_cur_time() << endl;
             s.write_to_file();
         }
         if (show_time)
             cout << "current time " << s.get_cur_time() << endl;
-        update_count++;
+//        update_count++;
     }
     s.write_to_file();
 

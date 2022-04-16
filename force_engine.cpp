@@ -455,15 +455,25 @@ void force_engine::point_load(beam * b1, beam * b2) {
         return;
     }
 
+    if (debug)
+        cout << "beam level bounding sphere done" << endl;
+
     // Then check with oriented bounding box
     oriented_bounding_box obb_1 {};
     obb_1.set_obb_info(utils::get_points_from_beam(b1, 1, b1->get_nelement(), 5));
     oriented_bounding_box obb_2 {};
     obb_2.set_obb_info(utils::get_points_from_beam(b2, 1, b2->get_nelement(), 5));
+    if (debug)
+        cout << "beam level obb info configured" << endl;
     // In case of no disjoint, no contact force
     if (obb_1.is_obb_disjoint(obb_2, b1->get_thick()/2.0+b2->get_thick()/2.0)) {
+        if (debug)
+            cout << "beam level obb done result clear" << endl;
         return;
     }
+
+    if (debug)
+        cout << "beam level obb done" << endl;
 
     // Otherwise, call segment collision detection recursively
     point_load_segment_level(b1, 1, b1->get_nelement(), b2, 1, b2->get_nelement());

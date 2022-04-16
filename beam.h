@@ -35,7 +35,7 @@ public:
     static int counter;
     beam() = default;
     beam(const beam &);
-    ~beam() = default;
+    ~beam();
     void set_beam_id();
     void set_area();
     void set_inertia();
