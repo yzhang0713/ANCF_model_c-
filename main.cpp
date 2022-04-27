@@ -82,7 +82,9 @@ int main() {
     }
     if (debug)
         cout << "update distributed force done" << endl;
-    s.reset_beam_point_forces();
+//    s.reset_beam_point_forces();
+    s.initialize_beam_point_forces();
+//    s.debug_beam_point_forces();
     if (debug)
         cout << "reset point force done" << endl;
     if (s.get_point_force_switch()) {
@@ -123,17 +125,18 @@ int main() {
     int update_count = 0;
     while (s.get_cur_time() < t_end) {
         // Store current beam information
-        s.store_beam_information();
-//        if (update_count == 1) {
-//            s.store_beam_information();
-//            update_count = 0;
-//        }
+//        s.store_beam_information();
+        if (update_count == 100) {
+            s.store_beam_information();
+            update_count = 0;
+        }
         // Moving beam to next position
         s.update_beams();
         // Update time
         s.update_time();
         // Update point load based on new position
         s.reset_beam_point_forces();
+//        s.debug_beam_point_forces();
         if (s.get_point_force_switch()) {
             s.update_beam_point_forces();
         }
@@ -150,7 +153,7 @@ int main() {
         }
         if (show_time)
             cout << "current time " << s.get_cur_time() << endl;
-//        update_count++;
+        update_count++;
     }
     s.write_to_file();
 

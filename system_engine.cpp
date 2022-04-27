@@ -312,12 +312,29 @@ void system_engine::update_beam_dist_forces() {
     }
 }
 
+void system_engine::initialize_beam_point_forces() {
+    for (beam * b : beams) {
+        VectorXd qzero = VectorXd::Zero(b->get_ndof());
+        b->set_point_force(qzero);
+    }
+}
+
 void system_engine::reset_beam_point_forces() {
     for (beam * b : beams) {
-        b->set_point_force(VectorXd::Zero(b->get_ndof()));
+//        VectorXd qzero = VectorXd::Zero(b->get_ndof());
+        b->get_point_force().setZero();
+//        b->set_point_force(qzero);
+//        b->reset_point_force();
         if (debug) {
             cout << "reset point forces" << b->get_point_force().transpose() << endl;
         }
+    }
+}
+
+void system_engine::debug_beam_point_forces() {
+    for (beam * b : beams) {
+        cout << "point force of beam " << b->get_beam_id() << endl;
+        cout << "    " << b->get_point_force().transpose() << endl;
     }
 }
 
@@ -541,7 +558,7 @@ void system_engine::check_output_folder() {
 }
 
 int system_engine::check_write() {
-    return time_record.size() >= 1000;
+    return time_record.size() >= 100;
 }
 
 void system_engine::load_switches() {

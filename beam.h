@@ -63,6 +63,7 @@ public:
     void set_damping_force(VectorXd Qd) {forces->set_Q_damping(Qd);};
     void set_dist_force(VectorXd Qd) {forces->set_Q_dist(Qd);};
     void set_point_force(VectorXd Qp) {forces->set_Q_point(Qp);};
+    void reset_point_force() {forces->set_Q_point(VectorXd::Zero(ndof));};
     void set_external_force(VectorXd Qe) {forces->set_Q_external(Qe);};
     void set_total_force();
     VectorXd& get_gravity_force() {return forces->get_Q_gravity();};

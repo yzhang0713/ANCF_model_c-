@@ -317,7 +317,7 @@ void force_engine::point_load_element_level(beam * b1, int ielement_1, beam * b2
     Qp2.setZero();
 
     // Contact parameters
-    double stiffness_factor = 1.0e-3;
+    double stiffness_factor = 1.0e-2;
     double E_star = stiffness_factor / ((2.0*(1.0-pow(b1->get_nu(),2))/b1->get_E()) +
             (2.0*(1.0-pow(b2->get_nu(),2)/b2->get_E())));
     double R = 1.0 / (2.0/b1->get_thick() + 2.0/b2->get_thick());

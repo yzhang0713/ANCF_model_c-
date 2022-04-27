@@ -71,7 +71,9 @@ public:
     void update_beam_gravity_forces();
     void update_beam_elastic_forces();
     void update_beam_dist_forces();
+    void initialize_beam_point_forces();
     void reset_beam_point_forces();
+    void debug_beam_point_forces();
     void update_beam_point_forces();
     void update_beam_external_forces();
     void update_beam_damping_forces();
